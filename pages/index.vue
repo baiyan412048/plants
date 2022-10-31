@@ -1,3 +1,3 @@
 <template>
-  <IronManWelcome />
+  <div></div>
 </template>

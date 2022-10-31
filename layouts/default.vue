@@ -1,6 +1,7 @@
 <template>
-  <div class="bg-sky-100 px-6 py-6">
-    <MainNavbar />
+  <div class="main-wrapper">
     <slot />
   </div>
 </template>
+
+<script leng="ts" setup></script>
