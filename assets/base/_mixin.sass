@@ -1,0 +1,22 @@
+
+=rwdmax($max)
+  @media only screen and (max-width: $max + px)  
+    @content
+
+=rwdmin($min)
+  @media only screen and (min-width: $min + px)  
+    @content
+
+=hover
+  +rwdmin(1201)
+    &:hover
+      @content
+  +rwdmax(1200)
+    &:active
+      @content
+
+=posCenter
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate3d(-50%, -50%, 0)

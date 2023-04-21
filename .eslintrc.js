@@ -1,28 +1,28 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
+    es2021: true
   },
-  extends: ["plugin:vue/vue3-recommended", "prettier"],
+  extends: ['plugin:vue/vue3-recommended', 'prettier'],
   parserOptions: {
     ecmaVersion: 13,
-    sourceType: "module",
+    sourceType: 'module'
   },
-  plugins: ["prettier"],
+  plugins: ['prettier'],
   rules: {
-    "prettier/prettier": "error",
+    'prettier/prettier': 'error'
   },
   overrides: [
     {
       files: [
-        "**/pages/**/*.{js,ts,vue}",
-        "**/layouts/**/*.{js,ts,vue}",
-        "**/app.{js,ts,vue}",
-        "**/error.{js,ts,vue}",
+        '**/pages/**/*.{js,ts,vue}',
+        '**/layouts/**/*.{js,ts,vue}',
+        '**/app.{js,ts,vue}',
+        '**/error.{js,ts,vue}'
       ],
       rules: {
-        "vue/multi-word-component-names": "off",
-      },
-    },
-  ],
-};
+        'vue/multi-word-component-names': 'off'
+      }
+    }
+  ]
+}
