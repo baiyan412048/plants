@@ -16,6 +16,14 @@ const articleSettingStore = useArticleSetting()
 const { getArticleSetting } = articleSettingStore
 const { data: setting } = await getArticleSetting()
 
+// 文章分類 store
+const articleCatalogStore = useArticleCatalog()
+// 文章分類 method
+const { getArticleCatalog } = articleCatalogStore
+// 文章分類
+const { data: catalogs } = await getArticleCatalog()
+const articleCatalog = computed(() => catalogs.value.data)
+
 // 文章 outline store
 const articleOutlineStore = useArticleOutline()
 // 文章 outline method
@@ -26,21 +34,14 @@ const { articleActiveCatalog } = storeToRefs(articleOutlineStore)
 const { data: outline } = await getArticleOutline()
 const articleOutline = computed(() => outline.value.data)
 
-// 文章分類 store
-const articleCatalogStore = useArticleCatalog()
-// 文章分類 method
-const { getArticleCatalog } = articleCatalogStore
-// 文章分類
-const { data: catalogs } = await getArticleCatalog()
-const articleCatalog = computed(() => catalogs.value.data)
-
 // 單元名稱
 const title = ref(setting.value.data[0].name)
 
 // 單元 banner
 const banner = reactive({
   desktop: setting.value.data[0].banner.desktop,
-  mobile: setting.value.data[0].banner?.mobile
+  mobile: setting.value.data[0].banner?.mobile,
+  color: setting.value.data[0].banner.color
 })
 
 // 分類初始值設定
@@ -89,7 +90,7 @@ useHead({
 
 <template>
   <div class="main-wrapper">
-    <CommonBanner :title="title" :image="banner">
+    <CommonBanner :color="banner.color" :title="title" :image="banner">
       <template #breadcrumbs>
         <CommonBreadcrumbs :breadcrumbs="breadcrumbs" />
       </template>

@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia'
 
 // 單元設定
-export const useNewsSetting = defineStore('newsSetting', () => {
+export const useProductSetting = defineStore('productSetting', () => {
   const runtimeConfig = useRuntimeConfig()
   const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
 
   // 取得單元設定
-  const getNewsSetting = async () => {
+  const getProductSetting = async () => {
     try {
       const { data, pending, error, refresh } = await useFetch(
-        `${API_BASE_URL}/api/news/setting`,
+        `${API_BASE_URL}/api/product/setting`,
         {
           pick: ['data']
         }
@@ -21,18 +21,18 @@ export const useNewsSetting = defineStore('newsSetting', () => {
     }
   }
 
-  return { getNewsSetting }
+  return { getProductSetting }
 })
 
-// 最新消息分類
-export const useNewsCatalog = defineStore('newsCatalog', () => {
+// 產品分類
+export const useProductCatalog = defineStore('productCatalog', () => {
   const runtimeConfig = useRuntimeConfig()
   const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
 
-  const getNewsCatalog = async () => {
+  const getProductCatalog = async () => {
     try {
       const { data, pending, error, refresh } = await useFetch(
-        `${API_BASE_URL}/api/news/catalogs`,
+        `${API_BASE_URL}/api/product/catalogs`,
         {
           pick: ['data']
         }
@@ -45,22 +45,25 @@ export const useNewsCatalog = defineStore('newsCatalog', () => {
   }
 
   return {
-    getNewsCatalog
+    getProductCatalog
   }
 })
 
-// 最新消息 outline
-export const useNewsOutline = defineStore('newsOutline', () => {
+// 產品 outline
+export const useProductOutline = defineStore('productOutline', () => {
   const runtimeConfig = useRuntimeConfig()
   const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
 
-  const newsIsInnerPage = ref(false)
-  const newsActiveCatalog = ref('全部類別')
+  const productIsInnerPage = ref(false)
+  const productActiveCatalog = reactive({
+    catalog: '所有植物',
+    type: 'plants'
+  })
 
-  const getNewsOutline = async () => {
+  const getProductOutline = async () => {
     try {
       const { data, pending, error, refresh } = await useFetch(
-        `${API_BASE_URL}/api/news`,
+        `${API_BASE_URL}/api/product`,
         {
           pick: ['data']
         }
@@ -73,21 +76,21 @@ export const useNewsOutline = defineStore('newsOutline', () => {
   }
 
   return {
-    newsIsInnerPage,
-    newsActiveCatalog,
-    getNewsOutline
+    productIsInnerPage,
+    productActiveCatalog,
+    getProductOutline
   }
 })
 
-// 最新消息 detail
-export const useNewsDetail = defineStore('newsDetail', () => {
+// 產品 detail
+export const useProductDetail = defineStore('productDetail', () => {
   const runtimeConfig = useRuntimeConfig()
   const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
 
-  const getNewsDetail = async (catalog, title) => {
+  const getProductDetail = async (catalog, title) => {
     try {
       const { data, pending, error, refresh } = await useFetch(
-        `${API_BASE_URL}/api/news/${catalog}${title ? `/${title}` : ''}`,
+        `${API_BASE_URL}/api/product/${catalog}${title ? `/${title}` : ''}`,
         {
           pick: ['data']
         }
@@ -100,6 +103,6 @@ export const useNewsDetail = defineStore('newsDetail', () => {
   }
 
   return {
-    getNewsDetail
+    getProductDetail
   }
 })

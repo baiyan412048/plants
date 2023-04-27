@@ -12,16 +12,6 @@ const newsSettingStore = useNewsSetting()
 const { getNewsSetting } = newsSettingStore
 const { data: setting } = await getNewsSetting()
 
-// 最新消息 outline store
-const newsOutlineStore = useNewsOutline()
-// 最新消息 outline method
-const { getNewsOutline } = newsOutlineStore
-// 最新消息 active catalog
-const { newsActiveCatalog } = storeToRefs(newsOutlineStore)
-// 最新消息 outline
-const { data: outline } = await getNewsOutline()
-const newsOutline = computed(() => outline.value.data)
-
 // 最新消息分類 store
 const newsCatalogStore = useNewsCatalog()
 // 最新消息分類 method
@@ -30,13 +20,24 @@ const { getNewsCatalog } = newsCatalogStore
 const { data: catalogs } = await getNewsCatalog()
 const newsCatalog = computed(() => catalogs.value.data)
 
+// 最新消息 outline store
+const newsOutlineStore = useNewsOutline()
+// 最新消息 outline method
+const { getNewsOutline } = newsOutlineStore
+// 最新消息 active catalog
+const { newsActiveCatalog } = storeToRefs(newsOutlineStore)
+// 最新消息 outline
+const { data: outline } = await getNewsOutline()
+const newsOutline = computed(() => outline.value?.data ?? [])
+
 // 單元名稱
 const title = ref(setting.value.data[0].name)
 
 // 單元 banner
 const banner = reactive({
   desktop: setting.value.data[0].banner.desktop,
-  mobile: setting.value.data[0].banner?.mobile
+  mobile: setting.value.data[0].banner?.mobile,
+  color: setting.value.data[0].banner.color
 })
 
 // 分類初始值設定
@@ -85,7 +86,7 @@ useHead({
 
 <template>
   <div class="main-wrapper">
-    <CommonBanner :title="title" :image="banner">
+    <CommonBanner :color="banner.color" :title="title" :image="banner">
       <template #breadcrumbs>
         <CommonBreadcrumbs :breadcrumbs="breadcrumbs" />
       </template>

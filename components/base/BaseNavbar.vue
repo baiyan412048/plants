@@ -12,12 +12,12 @@
           <NuxtLink to="/article">文章專欄</NuxtLink>
         </li>
         <li>
-          <p>產品</p>
+          <NuxtLink to="/product">植物觀園</NuxtLink>
         </li>
       </ul>
       <div class="member">
         <span>登入</span>
-        <span>購物車</span>
+        <NuxtLink to="/cart">購物車</NuxtLink>
       </div>
     </div>
   </nav>
@@ -35,6 +35,7 @@ nav.navbar
   top: 0
   left: 0
   width: 100%
+  pointer-events: none
   .container
     margin: 0 auto
     padding: 0 40px
@@ -47,16 +48,14 @@ nav.navbar
     max-width: 900px
     width: 100%
     height: 80px
-
+    pointer-events: auto
   .logo
     display: block
-
   .list
     margin: 0 auto
     display: flex
     align-items: center
     gap: 20px
-
   .member
     display: flex
     align-items: center

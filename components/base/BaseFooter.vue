@@ -1,7 +1,25 @@
 <script setup>
+import { useNewsSetting, useNewsCatalog } from '@/stores/news'
 import { useArticleSetting, useArticleCatalog } from '@/stores/article'
 
-// 單元設定
+// 最新消息單元設定
+const newsSettingStore = useNewsSetting()
+const { getNewsSetting } = newsSettingStore
+const { data: newsSetting } = await getNewsSetting()
+
+// 最新消息分類
+const newsCatalogStore = useNewsCatalog()
+const { getNewsCatalog } = newsCatalogStore
+const { data: newsCatalog } = await getNewsCatalog()
+
+const newsData = computed(() => {
+  return {
+    setting: newsSetting.value.data[0].name,
+    catalog: newsCatalog.value.data
+  }
+})
+
+// 文章單元設定
 const articleSettingStore = useArticleSetting()
 const { getArticleSetting } = articleSettingStore
 const { data: articleSetting } = await getArticleSetting()
@@ -25,22 +43,12 @@ const articleData = computed(() => {
       <div class="wrapper">
         <div class="links">
           <div>
-            <NuxtLink class="b" to="/news">最新消息</NuxtLink>
+            <NuxtLink class="b" to="/news">{{ newsData.setting }}</NuxtLink>
             <ul>
-              <li>
-                <NuxtLink to="/">營業日期</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">實體店面</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">線上購物</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">展覽介紹</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">優惠資訊</NuxtLink>
+              <li v-for="(catalog, key) in newsData.catalog" :key="key">
+                <NuxtLink :to="`/news/${catalog.catalog}`">{{
+                  catalog.catalog
+                }}</NuxtLink>
               </li>
             </ul>
           </div>
@@ -53,46 +61,6 @@ const articleData = computed(() => {
                 <NuxtLink :to="`/article/${catalog.catalog}`">{{
                   catalog.catalog
                 }}</NuxtLink>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <NuxtLink class="b" to="/news">最新消息</NuxtLink>
-            <ul>
-              <li>
-                <NuxtLink to="/">營業日期</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">實體店面</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">線上購物</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">展覽介紹</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">優惠資訊</NuxtLink>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <NuxtLink class="b" to="/news">最新消息</NuxtLink>
-            <ul>
-              <li>
-                <NuxtLink to="/">營業日期</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">實體店面</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">線上購物</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">展覽介紹</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/">優惠資訊</NuxtLink>
               </li>
             </ul>
           </div>

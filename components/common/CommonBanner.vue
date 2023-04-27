@@ -1,5 +1,11 @@
 <script setup>
 const props = defineProps({
+  color: {
+    type: String,
+    default() {
+      return 'black'
+    }
+  },
   title: {
     type: String,
     default() {
@@ -13,10 +19,12 @@ const props = defineProps({
     }
   }
 })
+
+const fontColor = ref(props.color)
 </script>
 
 <template>
-  <section class="common-banner">
+  <section class="common-banner" :class="fontColor">
     <picture>
       <source :srcset="props.image.mobile" media="(max-width: 767px)" />
       <img :src="props.image.desktop" alt="" />
@@ -40,6 +48,10 @@ const props = defineProps({
   z-index: 0
   width: 100%
   height: 600px
+  &.black
+    color: $black
+  &.white
+    color: #fff
   picture
     border-radius: 0 0 30px 30px
     overflow: hidden

@@ -49,5 +49,6 @@ const props = defineProps({
     +hover
       color: $black
   p
+    color: $black
     cursor: default
 </style>

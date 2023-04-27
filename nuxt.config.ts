@@ -1,6 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+// http://localhost:3000/api/image/
+// https://api.baiyan777.com/api/image
 export default defineNuxtConfig({
   modules: ['@pinia/nuxt', 'nuxt-icon', '@vueuse/nuxt'],
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: 'http://localhost:3000'
+    }
+  },
   css: ['@/assets/base/_reset.sass', '@/assets/base/_base.sass'],
   app: {
     head: {
@@ -19,5 +26,8 @@ export default defineNuxtConfig({
         }
       ]
     }
+  },
+  generate: {
+    routes: ['/cart']
   }
 })
