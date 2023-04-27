@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia'
 import {
   useProductSetting,
   useProductCatalog,
+  useProductFilter,
   useProductOutline
 } from '@/stores/product'
 
@@ -23,8 +24,52 @@ const productCatalogStore = useProductCatalog()
 // 產品分類 method
 const { getProductCatalog } = productCatalogStore
 // 產品分類
-const { data: catalogs } = await getProductCatalog()
-const productCatalog = computed(() => catalogs.value.data)
+const { data: catalog } = await getProductCatalog()
+const productCatalog = computed(() => catalog.value.data)
+
+// 產品篩選 store
+const productFilterStore = useProductFilter()
+// 產品篩選 method
+const { getProductSize, getProductDiff, getProductEnv } = productFilterStore
+// 產品篩選 - 尺寸
+const { data: size } = await getProductSize()
+const productSize = computed(() => size.value.data)
+// 尺寸篩選儲存
+const filterSize = ref([])
+// 更新尺寸篩選
+const updateFilterSize = (selected, target) => {
+  if (!selected) {
+    filterSize.value.splice(filterSize.value.indexOf(target.size), 1)
+    return
+  }
+  filterSize.value.push(target.size)
+}
+// 產品篩選 - 難易度
+const { data: diff } = await getProductDiff()
+const productDiff = computed(() => diff.value.data)
+// 難易度篩選儲存
+const filterDiff = ref([])
+// 更新難易度篩選
+const updateFilterDiff = (selected, target) => {
+  if (!selected) {
+    filterDiff.value.splice(filterDiff.value.indexOf(target.diff), 1)
+    return
+  }
+  filterDiff.value.push(target.diff)
+}
+// 產品篩選 - 環境
+const { data: env } = await getProductEnv()
+const productEnv = computed(() => env.value.data)
+// 環境篩選儲存
+const filterEnv = ref([])
+// 更新環境篩選
+const updateFilterEnv = (selected, target) => {
+  if (!selected) {
+    filterEnv.value.splice(filterEnv.value.indexOf(target.env), 1)
+    return
+  }
+  filterEnv.value.push(target.env)
+}
 
 // 產品 outline store
 const productOutlineStore = useProductOutline()
@@ -34,7 +79,6 @@ const { getProductOutline } = productOutlineStore
 const { productActiveCatalog } = storeToRefs(productOutlineStore)
 // 產品 outline
 const { data: outline } = await getProductOutline()
-const productOutline = computed(() => outline.value?.data ?? [])
 
 // 單元名稱
 const title = ref(setting.value.data[0].name)
@@ -48,11 +92,11 @@ const banner = reactive({
 
 // 分類初始值設定
 if (params.catalog) {
-  productActiveCatalog.catalog = params.catalog
-  productActiveCatalog.type = ''
+  productActiveCatalog.value.catalog = params.catalog
+  productActiveCatalog.value.type = ''
 } else {
-  productActiveCatalog.catalog = '所有植物'
-  productActiveCatalog.type = 'plants'
+  productActiveCatalog.value.catalog = '所有植物'
+  productActiveCatalog.value.type = 'plants'
 }
 
 // 所有分類
@@ -84,7 +128,45 @@ const breadcrumbs = reactive([
   }
 ])
 
-const priceRange = ref([20, 40])
+// 篩選後產品 outline
+const filterProductOutline = computed(() => {
+  let product = outline.value?.data
+
+  if (filterSize.value.length) {
+    product = product.filter((obj) => {
+      if (filterSize.value.includes(obj.size.size)) {
+        return obj
+      }
+    })
+  }
+  if (filterDiff.value.length) {
+    product = product.filter((obj) => {
+      if (filterDiff.value.includes(obj.diff.diff)) {
+        return obj
+      }
+    })
+  }
+  if (filterEnv.value.length) {
+    product = product.filter((obj) => {
+      if (filterEnv.value.includes(obj.env.env)) {
+        return obj
+      }
+    })
+  }
+
+  return product
+})
+
+// 價錢範圍
+// 篩選後的商品價錢最小最大值
+const priceRangeTemp = computed(() => {
+  const price = filterProductOutline.value
+    .map((obj) => obj.price)
+    .sort((a, b) => a - b)
+  return [price[0], price[price.length - 1]]
+})
+
+const priceRange = ref([priceRangeTemp.value[0], priceRangeTemp.value[1]])
 
 useHead({
   title: `${title.value} | 蒔栽`,
@@ -110,71 +192,52 @@ useHead({
     <div class="product-wrapper">
       <div class="product-container">
         <div class="product-aside">
-          <div class="price-block">
+          <div
+            v-if="priceRangeTemp[0] !== priceRangeTemp[1]"
+            class="price-block"
+          >
             <div class="placeholder">
               <p class="tag">價格區間</p>
               <p>${{ priceRange[0] }} ~ ${{ priceRange[1] }}</p>
             </div>
-            <Slider v-model="priceRange" :tooltips="false" />
+            <div class="price-slider">
+              <Slider
+                v-model="priceRange"
+                :min="priceRangeTemp[0]"
+                :max="priceRangeTemp[1]"
+                :tooltips="false"
+              />
+              <p class="range">
+                <span>${{ priceRangeTemp[0].toLocaleString() }}</span>
+                <span>${{ priceRangeTemp[1].toLocaleString() }}</span>
+              </p>
+            </div>
           </div>
-          <ul class="option-block">
-            <li>
-              <div class="placeholder">
-                <p class="tag">尺寸</p>
-                <div class="icon">
-                  <Icon name="ri:add-fill" size="28" />
-                </div>
-              </div>
-              <div class="list">
-                <ul>
-                  <li class="option">
-                    <label>
-                      <input type="checkbox" />
-                      <div class="checkbox"></div>
-                      <p>S ( 15 cm 以下 )</p>
-                    </label>
-                  </li>
-                  <li class="option">
-                    <label>
-                      <input type="checkbox" />
-                      <div class="checkbox"></div>
-                      <p>S ( 15 cm 以下 )</p>
-                    </label>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li>
-              <div class="placeholder">
-                <p class="tag">難易度</p>
-                <div class="icon">
-                  <Icon name="ri:subtract-fill" size="28" />
-                </div>
-              </div>
-              <div class="list">
-                <ul>
-                  <li class="option">
-                    <label>
-                      <input type="checkbox" />
-                      <div class="checkbox"></div>
-                      <p>S ( 15 cm 以下 )</p>
-                    </label>
-                  </li>
-                  <li class="option">
-                    <label>
-                      <input type="checkbox" />
-                      <div class="checkbox"></div>
-                      <p>S ( 15 cm 以下 )</p>
-                    </label>
-                  </li>
-                </ul>
-              </div>
-            </li>
+          <ul class="filter-block">
+            <ProductFilter
+              :name="'尺寸'"
+              :open="true"
+              :format="'size'"
+              :filter="productSize"
+              @update-filter="updateFilterSize"
+            />
+            <ProductFilter
+              :name="'難易度'"
+              :format="'diff'"
+              :filter="productDiff"
+              @update-filter="updateFilterDiff"
+            />
+            <ProductFilter
+              :name="'環境'"
+              :format="'env'"
+              :filter="productEnv"
+              @update-filter="updateFilterEnv"
+            />
           </ul>
         </div>
         <div class="product-list">
           <ul>
-            <template v-for="(item, key) in productOutline" :key="key">
+            <template v-for="(item, key) in filterProductOutline" :key="key">
               <li
                 v-if="
                   productActiveCatalog.catalog == '所有植物' ||
@@ -229,18 +292,32 @@ useHead({
       height: 25px
       content: ''
 
-.price-block
+.price-slider
   --slider-height: 2px
   --slider-bg: rgba(217, 217, 217, .2)
   --slider-handle-width: 10px
   --slider-handle-height: 10px
   --slider-handle-bg: #{$green}
   --slider-handle-shadow: none
+  .slider-target
+    margin: 0 auto
+    width: calc(100% - 10px)
+  .range
+    margin-top: 10px
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 20px
+    color: $gray
+    font-size: px(14)
+    line-height: 1.2
 
-.option-block
-  margin-top: 50px
+.filter-block
+  &:not(:first-child)
+    margin-top: 50px
   .placeholder
     border-bottom: 1px solid $gray
+    cursor: pointer
   .list
     padding: 10px 0
     border-bottom: 1px solid $gray
@@ -252,16 +329,27 @@ useHead({
       align-items: center
       justify-content: space-between
       gap: 20px
+      cursor: pointer
     input
       position: absolute
       opacity: 0
       pointer-events: none
+      &:checked + .checkbox
+        border: 2px solid $green
+        svg
+          display: block
+
   .checkbox
+    display: flex
+    align-items: center
+    justify-content: center
     border: 2px solid $black
-    // border: 2px solid $green
     border-radius: 3px
     width: 20px
     height: 20px
+    transition: border .2s
+    svg
+      display: none
 
 .product-list
   max-width: 900px

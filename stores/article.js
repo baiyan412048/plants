@@ -32,7 +32,7 @@ export const useArticleCatalog = defineStore('articleCatalog', () => {
   const getArticleCatalog = async () => {
     try {
       const { data, pending, error, refresh } = await useFetch(
-        `${API_BASE_URL}/api/article/catalogs`,
+        `${API_BASE_URL}/api/article/catalog`,
         {
           pick: ['data']
         }

@@ -32,7 +32,7 @@ export const useProductCatalog = defineStore('productCatalog', () => {
   const getProductCatalog = async () => {
     try {
       const { data, pending, error, refresh } = await useFetch(
-        `${API_BASE_URL}/api/product/catalogs`,
+        `${API_BASE_URL}/api/product/catalog`,
         {
           pick: ['data']
         }
@@ -46,6 +46,66 @@ export const useProductCatalog = defineStore('productCatalog', () => {
 
   return {
     getProductCatalog
+  }
+})
+
+// 產品篩選
+export const useProductFilter = defineStore('productFilter', () => {
+  const runtimeConfig = useRuntimeConfig()
+  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+
+  // 取得產品尺寸
+  const getProductSize = async () => {
+    try {
+      const { data, pending, error, refresh } = await useFetch(
+        `${API_BASE_URL}/api/product/size`,
+        {
+          pick: ['data']
+        }
+      )
+
+      return { data, pending, error, refresh }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  // 取得產品難易度
+  const getProductDiff = async () => {
+    try {
+      const { data, pending, error, refresh } = await useFetch(
+        `${API_BASE_URL}/api/product/diff`,
+        {
+          pick: ['data']
+        }
+      )
+
+      return { data, pending, error, refresh }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  // 取得產品環境
+  const getProductEnv = async () => {
+    try {
+      const { data, pending, error, refresh } = await useFetch(
+        `${API_BASE_URL}/api/product/env`,
+        {
+          pick: ['data']
+        }
+      )
+
+      return { data, pending, error, refresh }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  return {
+    getProductSize,
+    getProductDiff,
+    getProductEnv
   }
 })
 

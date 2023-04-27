@@ -1,6 +1,7 @@
 <script setup>
 import { useNewsSetting, useNewsCatalog } from '@/stores/news'
 import { useArticleSetting, useArticleCatalog } from '@/stores/article'
+import { useProductSetting, useProductCatalog } from '@/stores/product'
 
 // 最新消息單元設定
 const newsSettingStore = useNewsSetting()
@@ -11,7 +12,6 @@ const { data: newsSetting } = await getNewsSetting()
 const newsCatalogStore = useNewsCatalog()
 const { getNewsCatalog } = newsCatalogStore
 const { data: newsCatalog } = await getNewsCatalog()
-
 const newsData = computed(() => {
   return {
     setting: newsSetting.value.data[0].name,
@@ -28,11 +28,26 @@ const { data: articleSetting } = await getArticleSetting()
 const articleCatalogStore = useArticleCatalog()
 const { getArticleCatalog } = articleCatalogStore
 const { data: articleCatalog } = await getArticleCatalog()
-
 const articleData = computed(() => {
   return {
     setting: articleSetting.value.data[0].name,
     catalog: articleCatalog.value.data
+  }
+})
+
+// 產品單元設定
+const productSettingStore = useProductSetting()
+const { getProductSetting } = productSettingStore
+const { data: productSetting } = await getProductSetting()
+
+// 產品分類
+const productCatalogStore = useProductCatalog()
+const { getProductCatalog } = productCatalogStore
+const { data: productCatalog } = await getProductCatalog()
+const productData = computed(() => {
+  return {
+    setting: productSetting.value.data[0].name,
+    catalog: productCatalog.value.data
   }
 })
 </script>
@@ -58,6 +73,18 @@ const articleData = computed(() => {
             }}</NuxtLink>
             <ul>
               <li v-for="(catalog, key) in articleData.catalog" :key="key">
+                <NuxtLink :to="`/article/${catalog.catalog}`">{{
+                  catalog.catalog
+                }}</NuxtLink>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <NuxtLink class="b" to="/article">{{
+              productData.setting
+            }}</NuxtLink>
+            <ul>
+              <li v-for="(catalog, key) in productData.catalog" :key="key">
                 <NuxtLink :to="`/article/${catalog.catalog}`">{{
                   catalog.catalog
                 }}</NuxtLink>

@@ -32,7 +32,7 @@ export const useNewsCatalog = defineStore('newsCatalog', () => {
   const getNewsCatalog = async () => {
     try {
       const { data, pending, error, refresh } = await useFetch(
-        `${API_BASE_URL}/api/news/catalogs`,
+        `${API_BASE_URL}/api/news/catalog`,
         {
           pick: ['data']
         }

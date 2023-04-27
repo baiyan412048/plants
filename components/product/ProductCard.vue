@@ -48,10 +48,10 @@ const newItemTagState = computed(() => {
           </div>
         </div>
         <div class="detail">
-          <p class="stock">SOLD OUT</p>
+          <p v-if="props.product.stock <= 0" class="stock">SOLD OUT</p>
           <div class="price">
-            <p class="delete">$999</p>
-            <p class="">$890</p>
+            <p class="delete">${{ props.product.price.toLocaleString() }}</p>
+            <p class="">${{ props.product.price.toLocaleString() }}</p>
           </div>
         </div>
       </div>
