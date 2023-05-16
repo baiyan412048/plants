@@ -2,7 +2,15 @@
 // http://localhost:3000/api/image/
 // https://api.baiyan777.com/api/image
 export default defineNuxtConfig({
-  modules: ['@pinia/nuxt', 'nuxt-icon', '@vueuse/nuxt'],
+  modules: [
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
+    'nuxt-icon',
+    '@vueuse/nuxt'
+  ],
+  piniaPersistedstate: {
+    debug: true
+  },
   runtimeConfig: {
     public: {
       apiBaseUrl: 'http://localhost:3000'

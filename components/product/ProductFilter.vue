@@ -1,17 +1,5 @@
 <script setup>
 const props = defineProps({
-  open: {
-    type: Boolean,
-    default() {
-      return false
-    }
-  },
-  name: {
-    type: String,
-    default() {
-      return ''
-    }
-  },
   format: {
     type: String,
     default() {
@@ -27,34 +15,57 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['updateFilter'])
-
-const collapseState = ref(props.open ? true : false)
 </script>
 
 <template>
-  <li>
-    <div class="placeholder" @click="collapseState = !collapseState">
-      <p class="tag">{{ props.name }}</p>
-      <div class="icon">
-        <Icon v-if="!collapseState" name="ri:add-fill" size="28" />
-        <Icon v-else name="ri:subtract-fill" size="28" />
-      </div>
-    </div>
-    <div v-show="collapseState" class="list">
-      <ul>
-        <li v-for="(item, key) in props.filter" :key="key" class="option">
-          <label>
-            <input
-              type="checkbox"
-              @change="$emit('updateFilter', $event.target.checked, item)"
-            />
-            <div class="checkbox">
-              <Icon name="Checked" size="14" />
-            </div>
-            <p>{{ item[props.format] }}</p>
-          </label>
-        </li>
-      </ul>
-    </div>
-  </li>
+  <ul>
+    <li v-for="(item, key) in props.filter" :key="key" class="option">
+      <label>
+        <input
+          type="checkbox"
+          @change="$emit('updateFilter', $event.target.checked, item)"
+        />
+        <div class="checkbox">
+          <Icon name="Checked" size="14" />
+        </div>
+        <p>{{ item[props.format] }}</p>
+      </label>
+    </li>
+  </ul>
 </template>
+
+<style lang="sass" scoped>
+@import '@/assets/base/_variable.sass'
+@import '@/assets/base/_mixin.sass'
+@import '@/assets/base/_function.sass'
+
+.option
+  label
+    padding: 10px
+    position: relative
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 20px
+    cursor: pointer
+  input
+    position: absolute
+    opacity: 0
+    pointer-events: none
+    &:checked + .checkbox
+      border: 2px solid $green
+      svg
+        display: block
+
+.checkbox
+  display: flex
+  align-items: center
+  justify-content: center
+  border: 2px solid $black
+  border-radius: 3px
+  width: 20px
+  height: 20px
+  transition: border .2s
+  svg
+    display: none
+</style>

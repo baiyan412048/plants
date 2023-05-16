@@ -17,8 +17,8 @@ const newsCatalogStore = useNewsCatalog()
 // 最新消息分類 method
 const { getNewsCatalog } = newsCatalogStore
 // 最新消息分類
-const { data: catalogs } = await getNewsCatalog()
-const newsCatalog = computed(() => catalogs.value.data)
+const { data: catalog } = await getNewsCatalog()
+const newsCatalog = computed(() => catalog.value.data)
 
 // 最新消息 outline store
 const newsOutlineStore = useNewsOutline()
@@ -116,7 +116,7 @@ useHead({
   </div>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'

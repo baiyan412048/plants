@@ -124,7 +124,7 @@ const breadcrumbs = reactive([
     href: '/product'
   },
   {
-    name: productActiveCatalog.catalog
+    name: productActiveCatalog.value.catalog
   }
 ])
 
@@ -132,6 +132,17 @@ const breadcrumbs = reactive([
 const filterProductOutline = computed(() => {
   let product = outline.value?.data
 
+  // 篩選產品分類
+  product = product.filter((obj) => {
+    if (
+      productActiveCatalog.value.catalog == '所有植物' ||
+      productActiveCatalog.value.catalog == obj.catalog.catalog
+    ) {
+      return obj
+    }
+  })
+
+  // 篩選產品尺寸
   if (filterSize.value.length) {
     product = product.filter((obj) => {
       if (filterSize.value.includes(obj.size.size)) {
@@ -139,6 +150,7 @@ const filterProductOutline = computed(() => {
       }
     })
   }
+  // 篩選產品難易度
   if (filterDiff.value.length) {
     product = product.filter((obj) => {
       if (filterDiff.value.includes(obj.diff.diff)) {
@@ -146,6 +158,7 @@ const filterProductOutline = computed(() => {
       }
     })
   }
+  // 篩選產品環境
   if (filterEnv.value.length) {
     product = product.filter((obj) => {
       if (filterEnv.value.includes(obj.env.env)) {
@@ -169,9 +182,9 @@ const priceRangeTemp = computed(() => {
 const priceRange = ref([priceRangeTemp.value[0], priceRangeTemp.value[1]])
 
 useHead({
-  title: `${title.value} | 蒔栽`,
+  title: `${productActiveCatalog.value.catalog} | 蒔栽`,
   bodyAttrs: {
-    class: 'product'
+    class: 'member'
   }
 })
 </script>
@@ -191,14 +204,18 @@ useHead({
     </CommonBanner>
     <div class="product-wrapper">
       <div class="product-container">
-        <div class="product-aside">
+        <aside class="product-aside">
           <div
             v-if="priceRangeTemp[0] !== priceRangeTemp[1]"
             class="price-block"
           >
             <div class="placeholder">
               <p class="tag">價格區間</p>
-              <p>${{ priceRange[0] }} ~ ${{ priceRange[1] }}</p>
+              <p>
+                <span>${{ priceRange[0] }}</span>
+                ~
+                <span>${{ priceRange[1] }}</span>
+              </p>
             </div>
             <div class="price-slider">
               <Slider
@@ -213,35 +230,45 @@ useHead({
               </p>
             </div>
           </div>
-          <ul class="filter-block">
-            <ProductFilter
-              :name="'尺寸'"
-              :open="true"
-              :format="'size'"
-              :filter="productSize"
-              @update-filter="updateFilterSize"
-            />
-            <ProductFilter
-              :name="'難易度'"
-              :format="'diff'"
-              :filter="productDiff"
-              @update-filter="updateFilterDiff"
-            />
-            <ProductFilter
-              :name="'環境'"
-              :format="'env'"
-              :filter="productEnv"
-              @update-filter="updateFilterEnv"
-            />
-          </ul>
-        </div>
+          <div class="filter-block">
+            <CommonCollapse :open="true" :name="'尺寸'">
+              <template #target>
+                <ProductFilter
+                  :format="'size'"
+                  :filter="productSize"
+                  @update-filter="updateFilterSize"
+                />
+              </template>
+            </CommonCollapse>
+            <CommonCollapse :name="'難易度'">
+              <template #target>
+                <ProductFilter
+                  :format="'diff'"
+                  :filter="productDiff"
+                  @update-filter="updateFilterDiff"
+                />
+              </template>
+            </CommonCollapse>
+            <CommonCollapse :name="'環境'">
+              <template #target>
+                <ProductFilter
+                  :format="'env'"
+                  :filter="productEnv"
+                  @update-filter="updateFilterEnv"
+                />
+              </template>
+            </CommonCollapse>
+          </div>
+        </aside>
         <div class="product-list">
           <ul>
             <template v-for="(item, key) in filterProductOutline" :key="key">
               <li
                 v-if="
-                  productActiveCatalog.catalog == '所有植物' ||
-                  productActiveCatalog.catalog == item.catalog.catalog
+                  (productActiveCatalog.catalog == '所有植物' ||
+                    productActiveCatalog.catalog == item.catalog.catalog) &&
+                  priceRange[0] <= item.price &&
+                  priceRange[1] >= item.price
                 "
               >
                 <ProductCard :index="key" :product="item" />
@@ -256,7 +283,7 @@ useHead({
 
 <style src="@vueform/slider/themes/default.css"></style>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -274,23 +301,20 @@ useHead({
   width: 100%
 
 .product-aside
+  position: sticky
+  top: 160px
   max-width: 400px
   width: 28.5714%
+
+.price-block
   .placeholder
     padding: 20px 0
     display: flex
     align-items: center
     justify-content: space-between
-  .tag
-    display: flex
-    align-items: center
-    gap: 15px
-    &::before
-      display: block
-      background-color: $green
-      width: 5px
-      height: 25px
-      content: ''
+    cursor: pointer
+    span
+      border-bottom: 1px solid $black
 
 .price-slider
   --slider-height: 2px
@@ -315,41 +339,6 @@ useHead({
 .filter-block
   &:not(:first-child)
     margin-top: 50px
-  .placeholder
-    border-bottom: 1px solid $gray
-    cursor: pointer
-  .list
-    padding: 10px 0
-    border-bottom: 1px solid $gray
-  .option
-    label
-      padding: 10px
-      position: relative
-      display: flex
-      align-items: center
-      justify-content: space-between
-      gap: 20px
-      cursor: pointer
-    input
-      position: absolute
-      opacity: 0
-      pointer-events: none
-      &:checked + .checkbox
-        border: 2px solid $green
-        svg
-          display: block
-
-  .checkbox
-    display: flex
-    align-items: center
-    justify-content: center
-    border: 2px solid $black
-    border-radius: 3px
-    width: 20px
-    height: 20px
-    transition: border .2s
-    svg
-      display: none
 
 .product-list
   max-width: 900px

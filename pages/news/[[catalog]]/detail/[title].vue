@@ -1,6 +1,6 @@
 <script setup>
-import { useNewsSetting, useNewsDetail } from '@/stores/news'
 import { useDateFormat } from '@vueuse/core'
+import { useNewsSetting, useNewsDetail } from '@/stores/news'
 
 const route = useRoute()
 const { params } = route
@@ -22,7 +22,8 @@ const contents = computed(() => detail.value.data.contents)
 const { data: allDetail } = await getNewsDetail(params.catalog)
 
 // 取得其他 detail
-const otherDetail = () => {
+const otherDetail = computed(() => {
+  // 抓取除了自己以外的最新消息
   const target = allDetail.value.data.filter(
     (obj) => obj.outline.title !== params.title
   )
@@ -37,7 +38,7 @@ const otherDetail = () => {
   const [num1, num2] = useGetRandomNumbers(n, 2)
 
   return [target[num1], target[num2]]
-}
+})
 
 // 頁面麵包屑
 const breadcrumbs = reactive([
@@ -100,11 +101,11 @@ useHead({
             <div class="text">{{ paragraph.content }}</div>
           </div>
         </div>
-        <div v-if="otherDetail().length" class="other-group">
+        <div v-if="otherDetail.length" class="other-group">
           <CommonOtherDetail
-            v-for="(other, key) in otherDetail()"
+            v-for="(item, key) in otherDetail"
             :key="key"
-            :item="other"
+            :item="item.outline"
           />
         </div>
       </div>
@@ -151,7 +152,6 @@ useHead({
   .title
     margin-top: 20px
     font-size: px(32)
-    font-weight: 500
     line-height: 1.5
   .share-group
     margin-top: 100px

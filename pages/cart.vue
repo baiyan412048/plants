@@ -1,4 +1,7 @@
 <script setup>
+import { useMember } from '@/stores/member'
+import { useCart } from '@/stores/cart'
+
 import { Pagination, Autoplay, EffectFade } from 'swiper'
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -9,6 +12,24 @@ import 'swiper/css/effect-fade'
 const modules = [Pagination, Autoplay, EffectFade]
 
 const title = ref('購物車')
+
+// 會員資料 store
+const memberStore = useMember()
+
+// 購物車 store
+const cartStore = useCart()
+// 購物車 method
+const { removeCartItem } = cartStore
+// 增加數量
+const plus = () => {
+  if (cartStore.cartList[0].count == cartStore.cartList[0].stock) return
+  cartStore.cartList[0].count += 1
+}
+// 減少數量
+const minus = (item) => {
+  if (item.count == 1) return
+  item.count -= 1
+}
 
 // 頁面麵包屑
 const breadcrumbs = reactive([
@@ -75,47 +96,46 @@ useHead({
           </SwiperSlide>
         </Swiper>
       </div>
-      <div class="info">
+      <div v-if="!cartStore.cartList.length" class="no-result">
+        <p>購物車內無商品</p>
+      </div>
+      <div v-else class="info">
         <div class="info-list">
           <ul>
-            <li>
-              <div class="photo">
-                <img
-                  src="https://images.unsplash.com/photo-1597305877032-0668b3c6413a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
-                  alt=""
-                />
-              </div>
-              <div class="content">
-                <p>龜背芋</p>
-                <p>觀葉植物</p>
-                <div></div>
-              </div>
-              <div class="price"></div>
+            <li v-for="(item, key) in cartStore.cartList" :key="key">
+              <CartItem
+                :item="item"
+                @plus="plus"
+                @minus="minus"
+                @remove-item="removeCartItem"
+              />
             </li>
-            <li></li>
-            <li></li>
           </ul>
         </div>
         <div class="info-aside">
           <div class="block">
             <p>
               <span>小計</span>
-              <span>$3,400</span>
+              <span>NT ${{ cartStore.subtotalPrice.toLocaleString() }}</span>
             </p>
             <p>
-              <span>運費</span>
-              <span>$100</span>
+              <span>預估運費</span>
+              <span>NT ${{ cartStore.fee.toLocaleString() }}</span>
             </p>
           </div>
           <div class="block">
             <p>
               <span>總計</span>
-              <span>$3,500</span>
+              <span>NT ${{ cartStore.totalPrice.toLocaleString() }}</span>
             </p>
           </div>
-          <div class="block">
-            <button type="button">會員登入</button>
-            <button type="button">前往結帳</button>
+          <div class="block button-group">
+            <BaseButton
+              v-if="!memberStore.loginState"
+              :to="'/member/login'"
+              :text="'會員登入'"
+            />
+            <BaseButton :to="'/checkout'" :text="'前往結帳'" />
           </div>
         </div>
       </div>
@@ -185,7 +205,7 @@ useHead({
       margin-top: 10px
     .swiper-slide
       position: relative
-      aspect-ratio: 16/9
+      aspect-ratio: 3/2
       img
         position: absolute
         top: 0
@@ -194,11 +214,21 @@ useHead({
         width: 100%
         height: 100%
         object-fit: cover
+  .no-result
+    margin: 100px auto 0
+    padding: 30px
+    flex: 1
+    display: flex
+    align-items: center
+    justify-content: center
+    border-radius: 8px
+    border: 1px solid $green_fluorescent
+    max-width: 1000px
+    width: 100%
+    min-height: 100%
   .info
-    padding-top: 200px
     margin: 100px auto 0
     display: flex
-    align-items: flex-start
     gap: 30px
     max-width: 1280px
     width: 100%
@@ -206,33 +236,13 @@ useHead({
     flex: 1
     width: 100%
     li
-      padding: 30px 20px
-      display: flex
-      align-items: flex-start
-      gap: 30px
       &:not(:last-child)
         border-bottom: 1px solid $green_fluorescent
-    .photo
-      position: relative
-      width: 120px
-      height: 120px
-      img
-        position: absolute
-        top: 0
-        left: 0
-        border-radius: 8px
-        width: 100%
-        height: 100%
-        object-fit: cover
-    .content
-      flex: 1
-      width: 100%
-    .price
-      flex-shrink: 0
   .info-aside
     padding: 20px
+    align-self: flex-start
     position: sticky
-    top: 0
+    top: 160px
     flex-shrink: 0
     border: 1px solid $green_fluorescent
     border-radius: 8px
@@ -251,6 +261,10 @@ useHead({
       letter-spacing: .8px
       &:not(:last-child)
         margin-bottom: 20px
+  .button-group
+    display: flex
+    align-items: center
+    gap: 20px
   .may-like
     margin: 100px auto 0
     max-width: 1280px

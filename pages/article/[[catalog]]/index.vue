@@ -21,8 +21,8 @@ const articleCatalogStore = useArticleCatalog()
 // 文章分類 method
 const { getArticleCatalog } = articleCatalogStore
 // 文章分類
-const { data: catalogs } = await getArticleCatalog()
-const articleCatalog = computed(() => catalogs.value.data)
+const { data: catalog } = await getArticleCatalog()
+const articleCatalog = computed(() => catalog.value.data)
 
 // 文章 outline store
 const articleOutlineStore = useArticleOutline()

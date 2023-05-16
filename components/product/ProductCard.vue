@@ -1,4 +1,7 @@
 <script setup>
+import { useMember } from '@/stores/member'
+import { useToast } from '@/stores/toast'
+
 const props = defineProps({
   product: {
     type: Object,
@@ -14,16 +17,49 @@ const props = defineProps({
   }
 })
 
+// 會員資料 store
+const memberStore = useMember()
+// 會員資料 method
+const { addFavoriteProduct } = memberStore
+
+// 通知 store
+const toastStore = useToast()
+// 會員資料 method
+const { addToast } = toastStore
+
+const onAddFavoriteProduct = async (postData) => {
+  const { data, error } = await addFavoriteProduct(postData)
+  if (error.value?.data) {
+    // 訊息通知
+    addToast({
+      title: '尚未登入會員',
+      text: '請先登入會員',
+      state: 'notice',
+      button: [
+        {
+          type: 'a',
+          to: '/member/login',
+          text: '登入會員'
+        }
+      ]
+    })
+    return
+  }
+  // 訊息通知
+  addToast({
+    title: '已成功加入我的最愛',
+    state: 'success'
+  })
+}
+
+// 自動產生最新產品標籤
 const newItemTagState = computed(() => {
   const target = new Date(props.product.updatedAt)
   const today = new Date()
   today.setMonth(today.getMonth() - 1)
 
-  if (target > today) {
-    return true
-  } else {
-    return false
-  }
+  if (target > today) return true
+  else return false
 })
 </script>
 
@@ -42,7 +78,7 @@ const newItemTagState = computed(() => {
       <div class="content">
         <div class="info">
           <p class="title">{{ props.product.title }}</p>
-          <div class="favorite" @click.prevent="">
+          <div class="favorite" @click.prevent="onAddFavoriteProduct">
             <Icon v-if="!props.favorite" name="FavoriteLine" size="20" />
             <Icon v-else name="FavoriteFill" size="20" />
           </div>
@@ -50,8 +86,10 @@ const newItemTagState = computed(() => {
         <div class="detail">
           <p v-if="props.product.stock <= 0" class="stock">SOLD OUT</p>
           <div class="price">
-            <p class="delete">${{ props.product.price.toLocaleString() }}</p>
-            <p class="">${{ props.product.price.toLocaleString() }}</p>
+            <p v-if="props.product?.discount?.length" class="delete">
+              NT ${{ props.product.price.toLocaleString() }}
+            </p>
+            <p class="">NT ${{ props.product.price.toLocaleString() }}</p>
           </div>
         </div>
       </div>
@@ -132,7 +170,6 @@ const newItemTagState = computed(() => {
     justify-content: space-between
   .title
     font-size: px(20)
-    font-weight: 500
     line-height: 1.2
   .favorite
     display: flex
@@ -148,14 +185,12 @@ const newItemTagState = computed(() => {
   .stock
     color: $red
     font-size: px(12)
-    font-weight: 500
     line-height: 1.2
   .price
     display: flex
     align-items: flex-end
     gap: 10px
     font-size: px(20)
-    font-weight: 500
     .delete
       color: $gray
       font-size: px(14)

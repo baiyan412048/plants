@@ -1,3 +1,18 @@
+<script setup>
+import { useMember } from '@/stores/member'
+
+// 會員資料 store
+const memberStore = useMember()
+// 會員資料 method
+const { toLogout } = memberStore
+
+const logout = () => {
+  toLogout()
+  // 導向登入頁
+  navigateTo('/member/login')
+}
+</script>
+
 <template>
   <nav class="navbar">
     <div class="container">
@@ -16,7 +31,11 @@
         </li>
       </ul>
       <div class="member">
-        <span>登入</span>
+        <template v-if="memberStore.loginState">
+          <NuxtLink to="/member/center">會員中心</NuxtLink>
+          <div @click="logout">登出</div>
+        </template>
+        <NuxtLink v-else to="/member/login">登入會員</NuxtLink>
         <NuxtLink to="/cart">購物車</NuxtLink>
       </div>
     </div>
@@ -51,6 +70,7 @@ nav.navbar
     pointer-events: auto
   .logo
     display: block
+    width: 150px
   .list
     margin: 0 auto
     display: flex
@@ -59,7 +79,11 @@ nav.navbar
   .member
     display: flex
     align-items: center
+    justify-content: flex-end
     font-size: px(14)
     font-weight: 700
     gap: 10px
+    width: 150px
+    div
+      cursor: pointer
 </style>

@@ -1,28 +1,29 @@
 <script setup>
 const props = defineProps({
   item: {
+    type: Object,
+    default() {
+      return {}
+    }
+  },
+  href: {
     type: String,
     default() {
       return ''
     }
   }
 })
-
-const item = computed(() => props.item.outline)
 </script>
 
 <template>
-  <NuxtLink
-    class="common-others"
-    :to="`/article/${item.catalog.catalog}/detail/${item.title}`"
-  >
+  <NuxtLink class="common-others" :to="props.href">
     <div class="group">
       <p class="date">
-        {{ useDateFormat(item.updatedAt, 'YYYY.MM.DD').value }}
+        {{ useDateFormat(props.item.updatedAt, 'YYYY.MM.DD').value }}
       </p>
-      <span class="tag">{{ item.catalog.catalog }}</span>
+      <span class="tag">{{ props.item.catalog.catalog }}</span>
     </div>
-    <p class="title">{{ item.title }}</p>
+    <p class="title">{{ props.item.title }}</p>
   </NuxtLink>
 </template>
 
