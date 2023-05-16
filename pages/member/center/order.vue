@@ -23,7 +23,7 @@ const shipping = (value) => {
 
 <template>
   <div class="order-list">
-    <template v-if="profile.order.length">
+    <template v-if="profile?.order?.length">
       <ul>
         <li v-for="(item, key) in profile.order" :key="key" class="item">
           <NuxtLink :to="`/member/center/${item._id}`">

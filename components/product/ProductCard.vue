@@ -27,7 +27,12 @@ const toastStore = useToast()
 // 會員資料 method
 const { addToast } = toastStore
 
-const onAddFavoriteProduct = async (postData) => {
+const onAddFavoriteProduct = async (product) => {
+  const postData = {
+    id: memberStore.profile.id,
+    productId: props.product._id
+  }
+
   const { data, error } = await addFavoriteProduct(postData)
   if (error.value?.data) {
     // 訊息通知

@@ -44,7 +44,7 @@ export const useMember = defineStore('user', () => {
     }
   }
 
-  const addFavoriteProduct = async () => {
+  const addFavoriteProduct = async (postData) => {
     if (profile.id == '') {
       return {
         error: ref({
@@ -56,9 +56,9 @@ export const useMember = defineStore('user', () => {
     const { id } = postData
     try {
       const { data, pending, error, refresh } = await useFetch(
-        `${API_BASE_URL}/api/member/${id}`,
+        `${API_BASE_URL}/api/member/${id}/favorite`,
         {
-          method: 'PUT',
+          method: 'POST',
           body: postData,
           pick: ['data']
         }

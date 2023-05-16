@@ -11,18 +11,11 @@ const profile = computed(() => data.value.data)
 
 <template>
   <div class="favorite-list">
-    <template v-if="profile?.favorite.length">
+    <template v-if="profile?.favorite?.length">
       <ul>
         <template v-for="(item, key) in profile.favorite" :key="key">
-          <li
-            v-if="
-              (productActiveCatalog.catalog == '所有植物' ||
-                productActiveCatalog.catalog == item.catalog.catalog) &&
-              priceRange[0] <= item.price &&
-              priceRange[1] >= item.price
-            "
-          >
-            <ProductCard :index="key" :product="item" />
+          <li>
+            <ProductCard :index="key" :product="item" :favorite="true" />
           </li>
         </template>
       </ul>
