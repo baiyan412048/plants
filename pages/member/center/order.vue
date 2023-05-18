@@ -23,6 +23,7 @@ const shipping = (value) => {
 
 <template>
   <div class="order-list">
+    <p class="subtitle">訂單列表</p>
     <template v-if="profile?.order?.length">
       <ul>
         <li v-for="(item, key) in profile.order" :key="key" class="item">
@@ -64,9 +65,9 @@ const shipping = (value) => {
         </li>
       </ul>
     </template>
-    <div v-else class="no-result">
+    <BaseNoResult v-else>
       <p>目前無任何訂單，<NuxtLink to="/product">前往購買</NuxtLink></p>
-    </div>
+    </BaseNoResult>
   </div>
 </template>
 
@@ -76,6 +77,10 @@ const shipping = (value) => {
 @import '@/assets/base/_function.sass'
 
 .order-list
+  .subtitle
+    margin-bottom: 60px
+    font-size: px(20)
+    font-weight: 700
   .item
     &:not(:last-child)
       margin-bottom: 20px
@@ -94,16 +99,4 @@ const shipping = (value) => {
     .product
       flex: 1
       width: 100%
-  .no-result
-    margin: 100px auto 0
-    padding: 30px
-    flex: 1
-    display: flex
-    align-items: center
-    justify-content: center
-    border-radius: 8px
-    border: 1px solid $green_fluorescent
-    max-width: 1000px
-    width: 100%
-    min-height: 100%
 </style>

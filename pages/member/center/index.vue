@@ -20,7 +20,7 @@ const profileTemp = reactive({
 
 // 通知 store
 const toastStore = useToast()
-// 會員資料 method
+// 通知 method
 const { addToast } = toastStore
 
 const submitForm = async () => {
@@ -106,11 +106,12 @@ const submitForm = async () => {
 
 .profile-detail
   .subtitle
+    margin-bottom: 60px
     font-size: px(20)
     font-weight: 700
 
   .form
-    margin: 60px auto 0
+    margin: 0 auto
     display: flex
     align-items: center
     flex-wrap: wrap

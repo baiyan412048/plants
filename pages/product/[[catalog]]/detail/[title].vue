@@ -1,6 +1,7 @@
 <script setup>
 import { useProductSetting, useProductDetail } from '@/stores/product'
 import { useCart } from '@/stores/cart'
+import { useToast } from '@/stores/toast'
 
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper'
 // Import Swiper Vue.js components
@@ -25,6 +26,11 @@ const { data: setting } = await getProductSetting()
 const cartStore = useCart()
 // 購物車 method
 const { addCartItem } = cartStore
+
+// 通知 store
+const toastStore = useToast()
+// 通知 method
+const { addToast } = toastStore
 
 // 產品 detail store
 const productDetailStore = useProductDetail()
@@ -72,24 +78,6 @@ const care = computed(() => productDetail.value.care)
 
 // 相同分類所有產品 detail
 const { data: allDetail } = await getProductDetail(params.catalog)
-// 取得其他 detail
-const otherDetail = computed(() => {
-  // 抓取除了自己以外的產品
-  const target = allDetail.value.data.filter(
-    (obj) => obj.outline.title !== params.title
-  )
-
-  const n = target.length
-
-  // 只有一則，則直接回傳
-  if (n == 1) return target
-  // 沒有其他產品，則回傳空陣列
-  if (n == 0) return []
-
-  const [num1, num2] = useGetRandomNumbers(n, 2)
-
-  return [target[num1], target[num2]]
-})
 
 // 頁面麵包屑
 const breadcrumbs = reactive([
@@ -140,7 +128,6 @@ const totalPrice = computed(() => {
 // 加入購物車
 const addToCart = () => {
   const { title, image, catalog, stock, price } = outline
-  console.log(productDetail.value, 'productDetail.value')
   addCartItem({
     id: productDetail.value._id,
     title,
@@ -151,6 +138,18 @@ const addToCart = () => {
     price,
     purchase: purchase.filter((obj) => obj.selected)
   })
+  // 訊息通知
+  addToast({
+    title: '成功加入購物車',
+    state: 'success',
+    button: [
+      {
+        type: 'a',
+        to: '/cart',
+        text: '前往結帳'
+      }
+    ]
+  })
 }
 
 useHead({
@@ -158,6 +157,27 @@ useHead({
   bodyAttrs: {
     class: 'product'
   }
+})
+
+// 其他產品
+const otherDetail = reactive([])
+
+onMounted(() => {
+  // 抓取除了自己以外的產品
+  const target = allDetail.value.data.filter(
+    (obj) => obj.outline.title !== params.title
+  )
+
+  const n = target.length
+
+  // 只有一則，則直接回傳
+  if (n == 1) return target
+  // 沒有其他產品，則回傳空陣列
+  if (n == 0) return []
+
+  const [num1, num2] = useGetRandomNumbers(n, 2)
+
+  otherDetail.push(target[num1], target[num2])
 })
 </script>
 
@@ -279,9 +299,65 @@ useHead({
           </div>
         </div>
         <div class="info">
-          <div class="info-content"></div>
-          <div class="info-package"></div>
-          <div class="info-care"></div>
+          <div v-if="content.length" class="info-content">
+            <div
+              v-for="(paragraph, key) in content"
+              :key="key"
+              class="paragraph"
+            >
+              <div
+                v-if="paragraph.images.length"
+                class="images"
+                :class="`-${paragraph.style}`"
+              >
+                <img
+                  v-for="(src, index) in paragraph.images"
+                  :key="index"
+                  :src="src"
+                  alt=""
+                />
+              </div>
+              <div class="text">{{ paragraph.content }}</div>
+            </div>
+          </div>
+          <div v-if="packageService.length" class="info-package">
+            <div
+              v-for="(paragraph, key) in packageService"
+              :key="key"
+              class="paragraph"
+            >
+              <div
+                v-if="paragraph.images.length"
+                class="images"
+                :class="`-${paragraph.style}`"
+              >
+                <img
+                  v-for="(src, index) in paragraph.images"
+                  :key="index"
+                  :src="src"
+                  alt=""
+                />
+              </div>
+              <div class="text">{{ paragraph.content }}</div>
+            </div>
+          </div>
+          <div v-if="care.length" class="info-care">
+            <div v-for="(paragraph, key) in care" :key="key" class="paragraph">
+              <div
+                v-if="paragraph.images.length"
+                class="images"
+                :class="`-${paragraph.style}`"
+              >
+                <img
+                  v-for="(src, index) in paragraph.images"
+                  :key="index"
+                  :src="src"
+                  alt=""
+                />
+              </div>
+              <div class="text">{{ paragraph.content }}</div>
+            </div>
+          </div>
         </div>
         <CommonShareGroup />
         <div v-if="otherDetail.length" class="other-group">

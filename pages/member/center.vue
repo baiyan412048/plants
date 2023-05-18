@@ -8,8 +8,13 @@ const { toLogout } = memberStore
 
 const logout = () => {
   toLogout()
+  // 訊息通知
+  addToast({
+    title: '已成功登出',
+    state: 'success'
+  })
   // 導向登入頁
-  navigateTo('/member/login')
+  navigateTo('/')
 }
 
 useHead({

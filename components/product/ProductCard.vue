@@ -20,25 +20,36 @@ const props = defineProps({
 // 會員資料 store
 const memberStore = useMember()
 // 會員資料 method
-const { addFavoriteProduct } = memberStore
+const { addFavoriteProduct, removeFavoriteProduct } = memberStore
 
 // 通知 store
 const toastStore = useToast()
-// 會員資料 method
+// 通知 method
 const { addToast } = toastStore
 
-const onAddFavoriteProduct = async (product) => {
+// 我的最愛狀態
+const isFavorite = computed(() => {
+  return (
+    props.favorite || memberStore.profile.favorite.includes(props.product._id)
+  )
+})
+
+// 我的最愛
+const onToggleFavoriteProduct = async () => {
   const postData = {
     id: memberStore.profile.id,
     productId: props.product._id
   }
 
-  const { data, error } = await addFavoriteProduct(postData)
+  const { data, error } = await (isFavorite.value
+    ? removeFavoriteProduct(postData)
+    : addFavoriteProduct(postData))
+
+  const memberData = computed(() => data.value.data)
   if (error.value?.data) {
     // 訊息通知
     addToast({
       title: '尚未登入會員',
-      text: '請先登入會員',
       state: 'notice',
       button: [
         {
@@ -50,11 +61,20 @@ const onAddFavoriteProduct = async (product) => {
     })
     return
   }
+
   // 訊息通知
-  addToast({
-    title: '已成功加入我的最愛',
-    state: 'success'
-  })
+  isFavorite.value
+    ? addToast({
+        title: '已成功移除我的最愛',
+        state: 'success'
+      })
+    : addToast({
+        title: '已成功加入我的最愛',
+        state: 'success'
+      })
+
+  // 更新我的最愛
+  memberStore.profile.favorite = memberData.value.favorite
 }
 
 // 自動產生最新產品標籤
@@ -83,9 +103,9 @@ const newItemTagState = computed(() => {
       <div class="content">
         <div class="info">
           <p class="title">{{ props.product.title }}</p>
-          <div class="favorite" @click.prevent="onAddFavoriteProduct">
-            <Icon v-if="!props.favorite" name="FavoriteLine" size="20" />
-            <Icon v-else name="FavoriteFill" size="20" />
+          <div class="favorite" @click.prevent="onToggleFavoriteProduct">
+            <Icon v-if="isFavorite" name="FavoriteFill" size="20" />
+            <Icon v-else name="FavoriteLine" size="20" />
           </div>
         </div>
         <div class="detail">

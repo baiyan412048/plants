@@ -12,7 +12,7 @@ const { toLogin } = memberStore
 
 // 通知 store
 const toastStore = useToast()
-// 會員資料 method
+// 通知 method
 const { addToast } = toastStore
 
 const email = ref('A0980381643@gmail.com')
@@ -43,6 +43,8 @@ const submitForm = async () => {
   memberStore.profile.id = memberData.value._id
   memberStore.profile.name = memberData.value.name
   memberStore.profile.email = memberData.value.email
+  memberStore.profile.favorite = memberData.value.favorite
+
   // 訊息通知
   addToast({
     title: '登入成功',

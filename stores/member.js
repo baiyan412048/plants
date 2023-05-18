@@ -8,7 +8,8 @@ export const useMember = defineStore('user', () => {
   const profile = reactive({
     id: '',
     name: '',
-    email: ''
+    email: '',
+    favorite: []
   })
 
   const getDetailProfile = async (id) => {
@@ -70,6 +71,24 @@ export const useMember = defineStore('user', () => {
     }
   }
 
+  const removeFavoriteProduct = async (postData) => {
+    const { id } = postData
+    try {
+      const { data, pending, error, refresh } = await useFetch(
+        `${API_BASE_URL}/api/member/${id}/favorite`,
+        {
+          method: 'DELETE',
+          body: postData,
+          pick: ['data']
+        }
+      )
+
+      return { data, pending, error, refresh }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const toRegister = async (postData) => {
     try {
       const { data, pending, error, refresh } = await useFetch(
@@ -118,6 +137,7 @@ export const useMember = defineStore('user', () => {
     loginState,
     profile,
     addFavoriteProduct,
+    removeFavoriteProduct,
     toRegister,
     toLogin,
     toLogout,

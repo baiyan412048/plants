@@ -1,15 +1,24 @@
 <script setup>
 import { useMember } from '@/stores/member'
+import { useToast } from '@/stores/toast'
 
 // 會員資料 store
 const memberStore = useMember()
 // 會員資料 method
 const { toLogout } = memberStore
 
+// 通知 store
+const toastStore = useToast()
+// 通知 method
+const { addToast } = toastStore
+
 const logout = () => {
   toLogout()
-  // 導向登入頁
-  navigateTo('/member/login')
+  // 訊息通知
+  addToast({
+    title: '已成功登出',
+    state: 'success'
+  })
 }
 </script>
 

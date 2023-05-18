@@ -1,5 +1,7 @@
 <script setup>
+import { useProductDetail } from '@/stores/product'
 import { useMember } from '@/stores/member'
+import { useToast } from '@/stores/toast'
 import { useCart } from '@/stores/cart'
 
 import { Pagination, Autoplay, EffectFade } from 'swiper'
@@ -11,24 +13,40 @@ import 'swiper/css/effect-fade'
 
 const modules = [Pagination, Autoplay, EffectFade]
 
-const title = ref('購物車')
+// 產品 detail store
+const productDetailStore = useProductDetail()
+// 產品 detail method
+const { getProductDetail } = productDetailStore
 
 // 會員資料 store
 const memberStore = useMember()
+
+// 通知 store
+const toastStore = useToast()
+// 通知 method
+const { addToast } = toastStore
 
 // 購物車 store
 const cartStore = useCart()
 // 購物車 method
 const { removeCartItem } = cartStore
 // 增加數量
-const plus = () => {
-  if (cartStore.cartList[0].count == cartStore.cartList[0].stock) return
-  cartStore.cartList[0].count += 1
+const plus = (item) => {
+  if (item.count == item.stock) return
+  item.count += 1
 }
 // 減少數量
 const minus = (item) => {
   if (item.count == 1) return
   item.count -= 1
+}
+// 移除購物車商品
+const onRemoveCartItem = (id) => {
+  addToast({
+    title: '成功移除商品',
+    state: 'success'
+  })
+  removeCartItem(id)
 }
 
 // 頁面麵包屑
@@ -38,15 +56,42 @@ const breadcrumbs = reactive([
     href: '/'
   },
   {
-    name: title.value
+    name: '購物車'
   }
 ])
 
 useHead({
-  title: `${title.value} | 蒔栽`,
+  title: '購物車 | 蒔栽',
   bodyAttrs: {
     class: 'cart'
   }
+})
+
+// 其他產品
+const otherDetail = reactive([])
+
+onMounted(async () => {
+  // 購物車內所有分類
+  const allCatalog = []
+
+  // 產品 detail
+  const { data: detail } = await getProductDetail(params.catalog)
+
+  // 抓取除了自己以外的產品
+  const target = allDetail.value.data.filter(
+    (obj) => obj.outline.title !== params.title
+  )
+
+  const n = target.length
+
+  // 只有一則，則直接回傳
+  if (n == 1) return target
+  // 沒有其他產品，則回傳空陣列
+  if (n == 0) return []
+
+  const [num1, num2] = useGetRandomNumbers(n, 2)
+
+  otherDetail.push(target[num1], target[num2])
 })
 </script>
 
@@ -96,9 +141,9 @@ useHead({
           </SwiperSlide>
         </Swiper>
       </div>
-      <div v-if="!cartStore.cartList.length" class="no-result">
-        <p>購物車內無商品</p>
-      </div>
+      <BaseNoResult v-if="!cartStore.cartList.length">
+        <p>購物車內無新增商品</p>
+      </BaseNoResult>
       <div v-else class="info">
         <div class="info-list">
           <ul>
@@ -107,7 +152,7 @@ useHead({
                 :item="item"
                 @plus="plus"
                 @minus="minus"
-                @remove-item="removeCartItem"
+                @remove-item="onRemoveCartItem"
               />
             </li>
           </ul>
@@ -139,7 +184,7 @@ useHead({
           </div>
         </div>
       </div>
-      <div class="may-like">
+      <div v-if="cartStore.cartList.length" class="may-like">
         <p>也許你會喜歡</p>
         <div></div>
       </div>
@@ -175,7 +220,7 @@ useHead({
     padding-top: 130px
     text-align: center
   .discount
-    margin: 100px auto 0
+    margin: 100px auto
     max-width: 1000px
     width: 100%
     .tip
@@ -214,18 +259,6 @@ useHead({
         width: 100%
         height: 100%
         object-fit: cover
-  .no-result
-    margin: 100px auto 0
-    padding: 30px
-    flex: 1
-    display: flex
-    align-items: center
-    justify-content: center
-    border-radius: 8px
-    border: 1px solid $green_fluorescent
-    max-width: 1000px
-    width: 100%
-    min-height: 100%
   .info
     margin: 100px auto 0
     display: flex

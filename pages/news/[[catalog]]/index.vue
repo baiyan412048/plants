@@ -99,18 +99,22 @@ useHead({
     </CommonBanner>
     <div class="news-wrapper">
       <div class="news-list">
-        <ul>
-          <template v-for="(item, key) in newsOutline" :key="key">
-            <li
-              v-if="
-                newsActiveCatalog == '全部類別' ||
-                newsActiveCatalog == item.catalog.catalog
-              "
-            >
-              <NewsCard :index="key" :news="item" />
-            </li>
-          </template>
-        </ul>
+        <template v-if="newsOutline.length">
+          <ul>
+            <template v-for="(item, key) in newsOutline" :key="key">
+              <li
+                v-if="
+                  newsActiveCatalog == '全部類別' ||
+                  newsActiveCatalog == item.catalog.catalog
+                "
+              >
+                <NewsCard :index="key" :news="item" />
+              </li>
+            </template></ul
+        ></template>
+        <BaseNoResult v-else>
+          <p>尚未新增最新消息</p>
+        </BaseNoResult>
       </div>
     </div>
   </div>
