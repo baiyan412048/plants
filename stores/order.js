@@ -7,7 +7,7 @@ export const useOrder = defineStore('order', () => {
   const getMemberOrder = async (id) => {
     try {
       const { data, pending, error, refresh } = await useFetch(
-        `${API_BASE_URL}/api/order/${id ? id : ''}`,
+        `${API_BASE_URL}/api/order${id ? `/${id}` : ''}`,
         {
           pick: ['data']
         }
@@ -19,5 +19,22 @@ export const useOrder = defineStore('order', () => {
     }
   }
 
-  return { getMemberOrder }
+  const postMemberOrder = async (postData) => {
+    try {
+      const { data, pending, error, refresh } = await useFetch(
+        `${API_BASE_URL}/api/order/`,
+        {
+          method: 'POST',
+          body: postData,
+          pick: ['data']
+        }
+      )
+
+      return { data, pending, error, refresh }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  return { getMemberOrder, postMemberOrder }
 })

@@ -93,7 +93,11 @@ const banner = reactive({
 // 分類初始值設定
 if (params.catalog) {
   productActiveCatalog.value.catalog = params.catalog
-  productActiveCatalog.value.type = ''
+  productActiveCatalog.value.type = productCatalog.value.find((obj) => {
+    if (params.catalog == obj.catalog) {
+      return obj
+    }
+  }).type
 } else {
   productActiveCatalog.value.catalog = '所有植物'
   productActiveCatalog.value.type = 'plants'
@@ -131,7 +135,6 @@ const breadcrumbs = reactive([
 // 篩選後產品 outline
 const filterProductOutline = computed(() => {
   let product = outline.value?.data
-
   // 篩選產品分類
   product = product.filter((obj) => {
     if (
@@ -141,7 +144,6 @@ const filterProductOutline = computed(() => {
       return obj
     }
   })
-
   // 篩選產品尺寸
   if (filterSize.value.length) {
     product = product.filter((obj) => {
@@ -240,7 +242,10 @@ useHead({
                 />
               </template>
             </CommonCollapse>
-            <CommonCollapse :name="'難易度'">
+            <CommonCollapse
+              v-if="productActiveCatalog.type == 'plants'"
+              :name="'難易度'"
+            >
               <template #target>
                 <ProductFilter
                   :format="'diff'"
@@ -249,7 +254,10 @@ useHead({
                 />
               </template>
             </CommonCollapse>
-            <CommonCollapse :name="'環境'">
+            <CommonCollapse
+              v-if="productActiveCatalog.type == 'plants'"
+              :name="'環境'"
+            >
               <template #target>
                 <ProductFilter
                   :format="'env'"
@@ -261,20 +269,22 @@ useHead({
           </div>
         </aside>
         <div class="product-list">
-          <ul>
-            <template v-for="(item, key) in filterProductOutline" :key="key">
-              <li
-                v-if="
-                  (productActiveCatalog.catalog == '所有植物' ||
-                    productActiveCatalog.catalog == item.catalog.catalog) &&
-                  priceRange[0] <= item.price &&
-                  priceRange[1] >= item.price
-                "
-              >
-                <ProductCard :index="key" :product="item" />
-              </li>
-            </template>
-          </ul>
+          <template v-if="filterProductOutline.length">
+            <ul>
+              <template v-for="(item, key) in filterProductOutline" :key="key">
+                <li
+                  v-if="
+                    priceRange[0] <= item.price && priceRange[1] >= item.price
+                  "
+                >
+                  <ProductCard :index="key" :product="item" />
+                </li>
+              </template>
+            </ul>
+          </template>
+          <BaseNoResult v-else>
+            <p>此分類無商品</p>
+          </BaseNoResult>
         </div>
       </div>
     </div>

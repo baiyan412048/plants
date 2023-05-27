@@ -40,24 +40,26 @@ const { getProductDetail } = productDetailStore
 const { data: detail } = await getProductDetail(params.catalog, params.title)
 const productDetail = computed(() => detail.value.data)
 // 已存在購物車
-const isExist = cartStore.cartList.find(
+const isExist = cartStore.cartList?.find(
   (obj) => obj.id == productDetail.value._id
 )
 // 產品簡介
-const outline = reactive({ ...productDetail.value.outline })
+const outline = reactive(productDetail.value.outline)
 // 產品圖片輪播
-const slides = reactive([...productDetail.value.slides])
+const slides = reactive(
+  productDetail.value?.slides && [...productDetail.value?.slides]
+)
 // 產品描述
 const dep = ref(productDetail.value?.dep ?? '')
 // 庫存
 const stock = ref(outline.stock)
 // 購物須知
 const notes = ref(productDetail.value?.notes ?? '')
-// 優惠資訊
-const discount = reactive([...productDetail.value?.discount])
 // 加購商品
-const purchase = reactive([...productDetail.value?.purchase])
-purchase.forEach((obj) => {
+const purchase = reactive(
+  productDetail.value?.purchase && [...productDetail.value.purchase]
+)
+purchase?.forEach((obj) => {
   // 設定選項
   // 需顯示原購物車已選擇加購商品
   const target = isExist?.purchase
@@ -70,11 +72,11 @@ purchase.forEach((obj) => {
 // 選取加購商品
 const togglePurchase = (item) => (item.selected = !item.selected)
 // 產品介紹
-const content = computed(() => productDetail.value.contents)
+const content = computed(() => productDetail.value?.contents ?? [])
 // 包裝服務
-const packageService = computed(() => productDetail.value.package)
+const packageService = computed(() => productDetail.value?.package ?? [])
 // 照護方式
-const care = computed(() => productDetail.value.care)
+const care = computed(() => productDetail.value?.care ?? [])
 
 // 相同分類所有產品 detail
 const { data: allDetail } = await getProductDetail(params.catalog)
@@ -115,13 +117,14 @@ const minus = () => {
 const totalPrice = computed(() => {
   const price = parseInt(outline.price) * countTemp.value
   const purchasePriceGroup = purchase
-    .filter((obj) => obj.selected)
+    ?.filter((obj) => obj.selected)
     .map((obj) => obj.price)
-  const purchasePrice = purchasePriceGroup.length
-    ? purchasePriceGroup.reduce(
-        (accumulator, currentValue) => accumulator + currentValue
-      )
-    : 0
+  const purchasePrice =
+    purchasePriceGroup && purchasePriceGroup.length
+      ? purchasePriceGroup.reduce(
+          (accumulator, currentValue) => accumulator + currentValue
+        )
+      : 0
   return price + purchasePrice
 })
 
@@ -136,6 +139,7 @@ const addToCart = () => {
     catalog: catalog.catalog,
     count: countTemp.value,
     price,
+    total: totalPrice.value,
     purchase: purchase.filter((obj) => obj.selected)
   })
   // 訊息通知
@@ -145,8 +149,8 @@ const addToCart = () => {
     button: [
       {
         type: 'a',
-        to: '/cart',
-        text: '前往結帳'
+        to: '/checkout',
+        text: '馬上結帳'
       }
     ]
   })
@@ -193,9 +197,7 @@ onMounted(() => {
               <h1 class="title">{{ params.title }}</h1>
               <p class="dep">{{ dep }}</p>
               <div class="price">
-                <p v-if="discount.length" class="delete">
-                  NT ${{ outline.price.toLocaleString() }}
-                </p>
+                <p class="delete">NT ${{ outline.price.toLocaleString() }}</p>
                 <p>NT ${{ outline.price.toLocaleString() }}</p>
               </div>
               <div class="collapse">
@@ -211,18 +213,7 @@ onMounted(() => {
                   </template>
                 </CommonCollapse>
                 <CommonCollapse
-                  v-if="discount.length"
-                  :open="true"
-                  :name="'優惠資訊'"
-                >
-                  <template #target>
-                    <p>
-                      所有圖片皆為實物拍攝，由於電腦螢幕色差、拍攝光線等因素，照片與實物會略有差別，商品以實物為準。
-                    </p>
-                  </template>
-                </CommonCollapse>
-                <CommonCollapse
-                  v-if="purchase.length"
+                  v-if="purchase && purchase.length"
                   :open="true"
                   :name="'加購商品'"
                 >
@@ -256,7 +247,7 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-            <div v-if="slides.length" class="swiper-group">
+            <div v-if="slides && slides.length" class="swiper-group">
               <Swiper
                 :modules="modules"
                 :autoplay="{

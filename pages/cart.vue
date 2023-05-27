@@ -1,5 +1,5 @@
 <script setup>
-import { useProductDetail } from '@/stores/product'
+import { useProductOutline } from '@/stores/product'
 import { useMember } from '@/stores/member'
 import { useToast } from '@/stores/toast'
 import { useCart } from '@/stores/cart'
@@ -12,11 +12,6 @@ import 'swiper/css'
 import 'swiper/css/effect-fade'
 
 const modules = [Pagination, Autoplay, EffectFade]
-
-// 產品 detail store
-const productDetailStore = useProductDetail()
-// 產品 detail method
-const { getProductDetail } = productDetailStore
 
 // 會員資料 store
 const memberStore = useMember()
@@ -71,27 +66,24 @@ useHead({
 const otherDetail = reactive([])
 
 onMounted(async () => {
+  // 產品 detail store
+  const productOutlineStore = useProductOutline()
+  // 產品 detail method
+  const { getProductOutline } = productOutlineStore
+
   // 購物車內所有分類
-  const allCatalog = []
+  const allCatalog = [...cartStore.cartList.map((obj) => obj.catalog)]
 
   // 產品 detail
-  const { data: detail } = await getProductDetail(params.catalog)
+  const { data } = await getProductOutline()
+  const allDetail = computed(() => data.value.data)
 
   // 抓取除了自己以外的產品
-  const target = allDetail.value.data.filter(
-    (obj) => obj.outline.title !== params.title
+  const target = allDetail.value.filter((obj) =>
+    allCatalog.includes(obj.catalog.catalog)
   )
 
-  const n = target.length
-
-  // 只有一則，則直接回傳
-  if (n == 1) return target
-  // 沒有其他產品，則回傳空陣列
-  if (n == 0) return []
-
-  const [num1, num2] = useGetRandomNumbers(n, 2)
-
-  otherDetail.push(target[num1], target[num2])
+  otherDetail.push(...target)
 })
 </script>
 
@@ -100,46 +92,6 @@ onMounted(async () => {
     <div class="cart-wrapper">
       <div class="outline">
         <CommonBreadcrumbs :breadcrumbs="breadcrumbs" />
-      </div>
-      <div class="discount">
-        <div class="tip">
-          <p>優惠資訊</p>
-          <div class="disable">
-            <span>今日不要再顯示</span>
-            <Icon name="mdi:close" />
-          </div>
-        </div>
-        <Swiper
-          :modules="modules"
-          :autoplay="{
-            delay: 2500,
-            disableOnInteraction: false
-          }"
-          :speed="800"
-          :effect="'fade'"
-          :fade-effect="{
-            crossFade: true
-          }"
-        >
-          <SwiperSlide>
-            <img
-              src="https://images.unsplash.com/photo-1682241229580-e72acdf0eb6d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-              alt=""
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <img
-              src="https://images.unsplash.com/photo-1681767892373-f1af9a264226?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-              alt=""
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <img
-              src="https://images.unsplash.com/photo-1682240429814-c6a38c31d93c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-              alt=""
-            />
-          </SwiperSlide>
-        </Swiper>
       </div>
       <BaseNoResult v-if="!cartStore.cartList.length">
         <p>購物車內無新增商品</p>
@@ -185,8 +137,21 @@ onMounted(async () => {
         </div>
       </div>
       <div v-if="cartStore.cartList.length" class="may-like">
-        <p>也許你會喜歡</p>
-        <div></div>
+        <p class="tip">也許你會喜歡</p>
+        <Swiper
+          :slides-per-view="4"
+          :space-between="50"
+          :modules="modules"
+          :autoplay="{
+            delay: 2500,
+            disableOnInteraction: false
+          }"
+          :speed="800"
+        >
+          <SwiperSlide v-for="(item, key) in otherDetail" :key="key">
+            <ProductCard :index="key" :product="item" />
+          </SwiperSlide>
+        </Swiper>
       </div>
     </div>
   </div>
@@ -213,11 +178,12 @@ onMounted(async () => {
     pointer-events: none
     content: ''
   .outline
+    padding-top: 130px
+    margin-bottom: 60px
     display: flex
     flex-direction: column
     align-items: center
     justify-content: center
-    padding-top: 130px
     text-align: center
   .discount
     margin: 100px auto
@@ -302,7 +268,9 @@ onMounted(async () => {
     margin: 100px auto 0
     max-width: 1280px
     width: 100%
-    font-size: px(24)
-    line-height: 1.2
-    letter-spacing: .8px
+    .tip
+      margin-bottom: 20px
+      font-size: px(24)
+      line-height: 1.2
+      letter-spacing: .8px
 </style>

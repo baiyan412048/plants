@@ -6,6 +6,12 @@ const props = defineProps({
       return 'a'
     }
   },
+  for: {
+    type: String,
+    default() {
+      return ''
+    }
+  },
   to: {
     type: String,
     default() {
@@ -35,6 +41,12 @@ const emit = defineEmits(['toClick'])
   >
     {{ props.text }}
   </button>
+  <label
+    v-else-if="props.type == 'label'"
+    :for="props.for"
+    class="base-button"
+    >{{ props.text }}</label
+  >
   <button v-else class="base-button" type="button" @click="$emit('toClick')">
     {{ props.text }}
   </button>

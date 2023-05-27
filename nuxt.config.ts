@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      baseUrl: 'https://192.168.100.28:3001',
       apiBaseUrl: 'http://localhost:3000'
     }
   },
@@ -36,6 +37,6 @@ export default defineNuxtConfig({
     }
   },
   generate: {
-    routes: ['/cart']
+    routes: ['/privacy']
   }
 })

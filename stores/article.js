@@ -54,7 +54,6 @@ export const useArticleOutline = defineStore('articleOutline', () => {
   const runtimeConfig = useRuntimeConfig()
   const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
 
-  const articleIsInnerPage = ref(false)
   const articleActiveCatalog = ref('全部類別')
 
   const getArticleOutline = async () => {
@@ -73,7 +72,6 @@ export const useArticleOutline = defineStore('articleOutline', () => {
   }
 
   return {
-    articleIsInnerPage,
     articleActiveCatalog,
     getArticleOutline
   }

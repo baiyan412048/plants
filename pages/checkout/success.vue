@@ -1,4 +1,17 @@
 <script setup>
+import { useOrder } from '@/stores/order'
+
+const route = useRoute()
+const { query } = route
+
+// 訂單 store
+const orderStore = useOrder()
+// 訂單 method
+const { getMemberOrder } = orderStore
+
+const { data } = await getMemberOrder(query.orderId)
+const order = computed(() => data.value.data)
+
 useHead({
   title: `結帳流程 | 蒔栽`,
   bodyAttrs: {
@@ -16,6 +29,7 @@ definePageMeta({
     <div class="checkout-wrapper">
       <div class="container">
         <p>已成功付款</p>
+        <pre>{{ order }}</pre>
       </div>
     </div>
   </div>

@@ -16,7 +16,7 @@ export const useToast = defineStore('toast', () => {
   // },
 
   const addToast = (item) => {
-    item.id = Math.random().toString(36).substring(2, 5)
+    item.id = Math.random().toString(36).substring(2, 9)
     toastBag.push(item)
 
     // 3秒後移除通知

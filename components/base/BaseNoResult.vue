@@ -13,7 +13,7 @@
 
 .no-result
   margin: 0 auto
-  padding: 30px
+  padding: 60px 30px
   flex: 1
   display: flex
   align-items: center

@@ -1,7 +1,7 @@
 <script setup>
-import { useCheckout } from '@/stores/checkout'
 import { useMember } from '@/stores/member'
 import { useCart } from '@/stores/cart'
+import { usePayment } from '@/stores/payment'
 
 // 會員資料 store
 const memberStore = useMember()
@@ -13,12 +13,13 @@ const memberProfile = computed(() => profile.value.data)
 // 購物車 store
 const cartStore = useCart()
 
-// 結帳 store
-const checkoutStore = useCheckout()
-const { toCheckout } = checkoutStore
+// 付款 store
+const paymentStore = usePayment()
+// 訂單 method
+const { postPaymentRequest } = paymentStore
 
 // 付款方式
-const payment = ref('creditCard')
+const payment = ref('linepay')
 // 帳單資訊
 const billInfo = reactive({
   name: '',
@@ -78,40 +79,109 @@ const cityList = [
 ]
 
 const submitForm = async () => {
-  const list = cartStore.cartList.map((obj) => {
-    return {
-      count: obj.count,
-      product: obj.id,
-      purchase: obj.purchase.map((obj) => obj._id)
+  const runtimeConfig = useRuntimeConfig()
+  const { baseUrl: BASE_URL } = runtimeConfig.public
+
+  // 購物車商品整理
+  const productTemp = cartStore.cartList.map((obj) => {
+    const product = {
+      name: obj.title,
+      imageUrl: obj.image,
+      quantity: obj.count,
+      price: obj.price,
+      target: obj.id
     }
+
+    if (obj?.originalPrice) {
+      product.originalPrice = obj?.originalPrice
+    }
+
+    return product
+  })
+
+  // 購物車加購品整理
+  const purchaseTemp = []
+  cartStore.cartList.forEach((obj) => {
+    purchaseTemp.push(
+      ...obj.purchase.map((item) => {
+        const purchase = {
+          name: item.title,
+          imageUrl: item.image,
+          quantity: 1,
+          price: item.price,
+          target: item._id
+        }
+
+        if (item?.originalPrice) {
+          purchase.originalPrice = item?.originalPrice
+        }
+
+        return purchase
+      })
+    )
   })
 
   const postData = {
-    member: memberProfile.value._id,
-    list,
-    bill: {
+    // 商品
+    products: productTemp.map((obj) => {
+      return {
+        name: obj.name,
+        imageUrl: obj.imageUrl,
+        quantity: obj.quantity,
+        price: obj.price
+      }
+    }),
+    redirectUrls: {
+      confirmUrl: `${BASE_URL}/checkout/check`,
+      cancelUrl: `${BASE_URL}/checkout/fail`
+    }
+  }
+  // 若有加購品則添加 purchase
+  if (purchaseTemp.length) {
+    postData.purchase = purchaseTemp.map((obj) => {
+      return {
+        name: obj.name,
+        imageUrl: obj.imageUrl,
+        quantity: 1,
+        price: obj.price
+      }
+    })
+  }
+
+  // 結帳流程
+  const { data } = await postPaymentRequest(postData)
+  const request = computed(() => data.value.data)
+  console.log(request, 'request postPaymentRequest')
+  // 成功
+  // if (true) {
+  if (request.value.returnCode == '0000') {
+    // 更新訂單資訊
+    paymentStore.order.memberId = memberProfile.value._id
+    paymentStore.order.bill = {
       ...billInfo,
       payment: payment.value
-    },
-    shipping: {
+    }
+    paymentStore.order.shipping = {
       type: shippingType.value,
       ...shippingInfo
-    },
-    price: {
+    }
+    paymentStore.order.price = {
       total: cartStore.totalPrice,
       fee: cartStore.fee
     }
-  }
-
-  const { error } = await toCheckout(postData)
-
-  // 購買失敗
-  if (error.value?.data) {
-    navigateTo('/checkout/fail')
+    paymentStore.order.products = productTemp
+    paymentStore.order.purchase = purchaseTemp
+    // 更新付款金額
+    paymentStore.amount = request.value.amount
+    // 跳轉到付款畫面
+    // navigateTo('/checkout/check')
+    navigateTo(request.value.info.paymentUrl.web, {
+      external: true
+    })
     return
   }
-  // 成功購買
-  navigateTo('/checkout/success')
+  // // 失敗
+  // navigateTo('/checkout/fail')
 }
 
 useHead({
@@ -129,8 +199,10 @@ definePageMeta({
 <template>
   <div class="main-wrapper">
     <div class="checkout-wrapper">
+      <pre>{{ cartStore.cartList }}</pre>
       <div class="container">
         <form class="form" @submit.prevent="submitForm">
+          <input id="submit" type="submit" />
           <p class="title">結帳資訊</p>
           <div class="block">
             <div>
@@ -181,24 +253,10 @@ definePageMeta({
                         v-model="payment"
                         type="radio"
                         name="payment"
-                        value="creditCard"
+                        value="linepay"
                       />
                       <div class="wrap">
-                        <p>信用卡</p>
-                        <div class="checkbox"></div>
-                      </div>
-                    </label>
-                  </li>
-                  <li class="radio-item">
-                    <label>
-                      <input
-                        v-model="payment"
-                        type="radio"
-                        name="payment"
-                        value="atm"
-                      />
-                      <div class="wrap">
-                        <p>ATM 匯款</p>
+                        <p>LINE PAY</p>
                         <div class="checkbox"></div>
                       </div>
                     </label>
@@ -222,7 +280,6 @@ definePageMeta({
             </div>
           </div>
           <div class="block">
-            <pre>{{ shippingType }}</pre>
             <div>
               <p class="tip">配送方式</p>
               <button type="button" @click.prevent="shippingSameAsMember">
@@ -338,7 +395,6 @@ definePageMeta({
                   v-model="shippingInfo.remark"
                   rows="4"
                   placeholder="有任何問題歡迎於此備註"
-                  required
                 ></textarea>
               </div>
             </div>
@@ -371,7 +427,8 @@ definePageMeta({
           <div class="block button-group">
             <!-- <BaseButton :to="'/checkout/success'" :text="'確認購買'" /> -->
             <BaseButton
-              :type="'submit'"
+              :type="'label'"
+              :for="'submit'"
               :text="'確認購買'"
               @to-click="submitForm"
             />
@@ -396,7 +453,12 @@ definePageMeta({
     gap: 30px
     max-width: 1280px
   .form
+    position: relative
     width: 50%
+    input[type="submit"]
+      position: absolute
+      opacity: 0
+      pointer-events: none
     .title
       margin-bottom: 60px
       font-size: px(28)

@@ -91,6 +91,26 @@ const productData = computed(() => {
               </li>
             </ul>
           </div>
+          <div>
+            <NuxtLink class="b" to="/faq">常見問題</NuxtLink>
+            <ul>
+              <li>
+                <NuxtLink>商品相關</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink>訂單相關</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink>物流相關</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink>送禮相關</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink>退換貨相關</NuxtLink>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="info">
           <NuxtLink class="info-logo" to="/">
@@ -107,7 +127,7 @@ const productData = computed(() => {
         <div class="statement">
           <p>
             此網站僅做學術練習用途，請勿於網站上輸入私密資訊。<br />所有圖片及文章來源皆來自於網路，詳細資訊
-            <NuxtLink to="/">請參閱</NuxtLink>
+            <NuxtLink to="/privacy">請參閱</NuxtLink>
           </p>
           <p>Website by <NuxtLink to="/">Baiyan</NuxtLink></p>
         </div>
