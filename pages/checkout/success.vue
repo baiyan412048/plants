@@ -9,8 +9,18 @@ const orderStore = useOrder()
 // 訂單 method
 const { getMemberOrder } = orderStore
 
-const { data } = await getMemberOrder(query.orderId)
+const { data } = await getMemberOrder('647159c05a44f462ac8521d5')
 const order = computed(() => data.value.data)
+
+const payment = (value) => {
+  if (value == 'linepay') return 'Line pay'
+  if (value == 'shop') return '來店付款'
+}
+
+const shipping = (value) => {
+  if (value == 'delivery') return '貨運宅配'
+  if (value == 'selfPickUp') return '來店自取'
+}
 
 useHead({
   title: `結帳流程 | 蒔栽`,
@@ -28,8 +38,36 @@ definePageMeta({
   <div class="main-wrapper">
     <div class="checkout-wrapper">
       <div class="container">
-        <p>已成功付款</p>
-        <pre>{{ order }}</pre>
+        <p class="title">已成功付款</p>
+        <!-- <pre>{{ order }}</pre> -->
+        <div class="group">
+          <div class="block bill">
+            <p class="tip">帳單資訊</p>
+            <ul>
+              <li><span>姓名 :</span> {{ order.bill.name }}</li>
+              <li><span>手機 :</span> {{ `0${order.bill.phone}` }}</li>
+              <li><span>電子郵件 :</span> {{ order.bill.email }}</li>
+              <li><span>付款方式 :</span> {{ payment(order.bill.payment) }}</li>
+              <li>
+                <span>付款狀態 :</span
+                >{{ order.bill.state ? '付款成功' : '付款失敗' }}
+              </li>
+            </ul>
+          </div>
+          <div class="block shipping">
+            <p class="tip">配送資訊</p>
+            <ul>
+              <li><span>姓名 :</span>{{ order.shipping.name }}</li>
+              <li><span>手機 :</span>{{ `0${order.shipping.phone}` }}</li>
+              <li><span>電子郵件 :</span>{{ order.shipping.email }}</li>
+              <li>
+                <span>地址 :</span>{{ order.shipping.zone }} -
+                {{ order.shipping.address }}
+              </li>
+              <li><span>備註 :</span>{{ order.shipping.remark }}</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -42,10 +80,43 @@ definePageMeta({
 
 .checkout-wrapper
   padding: 120px 60px 100px
+  &::before
+    position: absolute
+    top: 0
+    left: 0
+    z-index: -1
+    display: block
+    background-image: linear-gradient(rgba($green_light, .2), rgba($green_light, 0))
+    width: 100%
+    height: 600px
+    pointer-events: none
+    content: ''
   .container
     padding-top: 130px
     margin: 0 auto
-    display: flex
-    gap: 30px
-    max-width: 1280px
+    max-width: 900px
+    .title
+      margin-bottom: 60px
+      font-size: px(32)
+      font-weight: 700
+      font-family: $serif
+      text-align: center
+    .group
+      display: flex
+      gap: 30px
+    .block
+      padding: 20px
+      border-radius: 8px
+      border: 1px solid $green
+      line-height: 1.6
+      width: 50%
+      .tip
+        margin-bottom: 10px
+        font-size: px(18)
+      li
+        &:not(:last-child)
+          margin-bottom: 10px
+      span
+        display: block
+        font-size: px(12)
 </style>

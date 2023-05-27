@@ -153,7 +153,6 @@ const submitForm = async () => {
   const request = computed(() => data.value.data)
   console.log(request, 'request postPaymentRequest')
   // 成功
-  // if (true) {
   if (request.value.returnCode == '0000') {
     // 更新訂單資訊
     paymentStore.order.memberId = memberProfile.value._id
@@ -174,14 +173,11 @@ const submitForm = async () => {
     // 更新付款金額
     paymentStore.amount = request.value.amount
     // 跳轉到付款畫面
-    // navigateTo('/checkout/check')
     navigateTo(request.value.info.paymentUrl.web, {
       external: true
     })
     return
   }
-  // // 失敗
-  // navigateTo('/checkout/fail')
 }
 
 useHead({

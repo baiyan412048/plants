@@ -10,9 +10,8 @@ const { data } = await getDetailProfile(memberStore.profile.id)
 const profile = computed(() => data.value.data)
 
 const payment = (value) => {
-  if (value == 'atm') return 'ATM 匯款'
+  if (value == 'linepay') return 'Line pay'
   if (value == 'shop') return '來店付款'
-  if (value == 'creditCard') return '信用卡'
 }
 
 const shipping = (value) => {
@@ -36,8 +35,8 @@ const shipping = (value) => {
             <div class="product">
               <p class="sub">商品名稱</p>
               <ul>
-                <li v-for="(obj, index) in item.list" :key="index">
-                  <p>{{ obj.product.outline.title }}</p>
+                <li v-for="(obj, index) in item.products" :key="index">
+                  <p>{{ obj.name }}</p>
                 </li>
               </ul>
             </div>

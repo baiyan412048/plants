@@ -68,6 +68,17 @@ definePageMeta({
 
 .member-center
   padding: 120px 60px 100px
+  &::before
+    position: absolute
+    top: 0
+    left: 0
+    z-index: -1
+    display: block
+    background-image: linear-gradient(rgba($yellow, .2), rgba($yellow, 0))
+    width: 100%
+    height: 600px
+    pointer-events: none
+    content: ''
   .outline
     padding-top: 130px
     text-align: center

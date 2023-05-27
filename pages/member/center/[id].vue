@@ -12,9 +12,8 @@ const { data } = await getMemberOrder(params.id)
 const order = computed(() => data.value.data)
 
 const payment = (value) => {
-  if (value == 'atm') return 'ATM 匯款'
+  if (value == 'linepay') return 'Line pay'
   if (value == 'shop') return '來店付款'
-  if (value == 'creditCard') return '信用卡'
 }
 
 const shipping = (value) => {
@@ -39,8 +38,12 @@ const shipping = (value) => {
         <p>{{ order.bill.state ? '付款成功' : '付款失敗' }}</p>
       </div>
       <div class="state">
+        <p class="sub">配送方式</p>
+        <p>{{ shipping(order.shipping.type) }}</p>
+      </div>
+      <div class="state">
         <p class="sub">配送狀態</p>
-        <p>配送中</p>
+        <p>{{ order.shipping.state }}</p>
       </div>
     </div>
     <div class="block bill">

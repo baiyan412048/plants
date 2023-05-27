@@ -26,13 +26,11 @@ const postData = {
   ...paymentStore.order
 }
 // 付款成功
-// if (true) {
 if (confirm.value.returnCode == '0000') {
   postData.bill.state = true
   const { data: order } = await postMemberOrder(postData)
   navigateTo(`/checkout/success?orderId=${order.value.data._id}`)
 } else {
-  await postMemberOrder(postData)
   // 失敗
   navigateTo('/checkout/fail')
 }
@@ -40,8 +38,14 @@ if (confirm.value.returnCode == '0000') {
 
 <template>
   <div>
-    <!-- <pre>{{ postData }}</pre> -->
-    <!-- <pre>{{ confirm }}</pre> -->
-    <p>確認付款中，請勿關閉網頁</p>
+    <p class="title">確認付款中，請勿關閉網頁</p>
   </div>
 </template>
+
+<style lang="sass" scoped>
+.title
+  font-size: px(32)
+  font-weight: 700
+  font-family: $serif
+  text-align: center
+</style>
