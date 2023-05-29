@@ -19,6 +19,8 @@ const logout = () => {
     title: '已成功登出',
     state: 'success'
   })
+  // 導向前一頁 || 會員中心
+  navigateTo(redirectTo.value ?? '/member/center')
 }
 </script>
 

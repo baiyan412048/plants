@@ -7,16 +7,17 @@ const memberStore = useMember()
 const { toRegister } = memberStore
 
 const profileTemp = reactive({
-  name: '陳聖元',
-  email: 'A0980381643@gmail.com',
-  password: 'aaaa0000',
-  phone: '0980381643',
-  address: '台中市潭子區潭興路二段339巷10號',
-  birthday: '1995-02-14'
+  name: '',
+  email: '',
+  password: '',
+  phone: '',
+  address: '',
+  birthday: ''
 })
 
 const submitForm = () => {
   const postData = { ...profileTemp }
+  postData.birthday = useDateFormat(postData.birthday, 'YYYY-MM-DD').value
   toRegister(postData)
   navigateTo('/member/login')
 }

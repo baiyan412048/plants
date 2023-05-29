@@ -1,12 +1,18 @@
 <script setup>
 import { useMember } from '@/stores/member'
+import { useToast } from '@/stores/toast'
 
 // 會員資料 store
 const memberStore = useMember()
 // 會員資料 method
-const { getDetailProfile, putDetailProfile, toLogout } = memberStore
+const { getDetailProfile, putMemberPassword, toLogout } = memberStore
 const { data, refresh } = await getDetailProfile(memberStore.profile.id)
 const profile = computed(() => data.value.data)
+
+// 通知 store
+const toastStore = useToast()
+// 通知 method
+const { addToast } = toastStore
 
 // 密碼儲存
 const password = reactive({
@@ -19,21 +25,32 @@ const password = reactive({
 const errorMessage = ref('')
 
 const submitForm = async () => {
-  if (profile.value.password !== password.old) {
-    errorMessage.value = '舊密碼輸入錯誤'
-    return
-  }
-
   if (password.new !== password.confirm) {
     errorMessage.value = '確認新密碼與新密碼不同'
     return
   }
 
-  const postData = { id: profile.value._id, password: password.new }
+  const postData = {
+    id: profile.value._id,
+    password: password.old,
+    newPassword: password.new
+  }
 
-  await putDetailProfile(postData)
+  const { error } = await putMemberPassword(postData)
+  if (error.value?.data) {
+    errorMessage.value = error.value?.data
+    return
+  }
+  // 訊息通知
+  addToast({
+    title: '成功修改密碼',
+    state: 'success'
+  })
   // 登出
   toLogout()
+  // 避免再次導回更換密碼頁面，設定重新導回產品頁
+  const redirectTo = useState('redirectTo')
+  redirectTo.value = '/product'
   // 導回登入畫面
   navigateTo('/member/login')
 }
@@ -47,12 +64,12 @@ const submitForm = async () => {
       </div>
       <form class="form" @submit.prevent="submitForm">
         <div class="full">
-          <label for="oldPassword">舊密碼</label>
+          <label for="oldPassword">原密碼</label>
           <input
             id="oldPassword"
             v-model="password.old"
             type="password"
-            placeholder="請輸入姓名"
+            placeholder="請輸入原密碼"
             required
           />
         </div>
@@ -62,7 +79,7 @@ const submitForm = async () => {
             id="newPassword"
             v-model="password.new"
             type="password"
-            placeholder="請輸入電子郵件"
+            placeholder="請輸入新密碼"
             required
           />
         </div>
@@ -72,7 +89,7 @@ const submitForm = async () => {
             id="confirmPassword"
             v-model="password.confirm"
             type="password"
-            placeholder="請輸入密碼"
+            placeholder="請再次輸入新密碼"
             required
           />
         </div>

@@ -50,6 +50,10 @@ if (confirm.value.returnCode == '0000') {
 </template>
 
 <style lang="sass" scoped>
+@import '@/assets/base/_variable.sass'
+@import '@/assets/base/_mixin.sass'
+@import '@/assets/base/_function.sass'
+
 .title
   font-size: px(32)
   font-weight: 700

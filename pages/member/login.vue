@@ -15,8 +15,8 @@ const toastStore = useToast()
 // 通知 method
 const { addToast } = toastStore
 
-const email = ref('A0980381643@gmail.com')
-const password = ref('aaaa0000')
+const email = ref('test@gmail.com')
+const password = ref('')
 
 const notice = ref('')
 

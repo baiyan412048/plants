@@ -48,6 +48,24 @@ export const useMember = defineStore('user', () => {
     }
   }
 
+  const putMemberPassword = async (postData) => {
+    const { id } = postData
+    try {
+      const { data, pending, error, refresh } = await useFetch(
+        `${API_BASE_URL}/api/member/${id}/password`,
+        {
+          method: 'PUT',
+          body: postData,
+          pick: ['data']
+        }
+      )
+
+      return { data, pending, error, refresh }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const addFavoriteProduct = async (postData) => {
     if (profile.id == '') {
       return {
@@ -123,16 +141,18 @@ export const useMember = defineStore('user', () => {
         }
       )
 
-      const memberData = computed(() => data.value.data)
+      if (!error.value?.data) {
+        const memberData = computed(() => data.value.data)
 
-      // 切換登入狀態
-      loginState.value = true
-      // 更新會員資訊
-      profile.value = {
-        id: memberData.value._id,
-        name: memberData.value.name,
-        email: memberData.value.email,
-        favorite: memberData.value.favorite
+        // 切換登入狀態
+        loginState.value = true
+        // 更新會員資訊
+        profile.value = {
+          id: memberData.value._id,
+          name: memberData.value.name,
+          email: memberData.value.email,
+          favorite: memberData.value.favorite
+        }
       }
 
       return { data, pending, error, refresh }
@@ -160,6 +180,7 @@ export const useMember = defineStore('user', () => {
     toLogin,
     toLogout,
     getDetailProfile,
-    putDetailProfile
+    putDetailProfile,
+    putMemberPassword
   }
 })
