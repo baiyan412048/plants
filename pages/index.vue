@@ -25,6 +25,10 @@ const banner = reactive({
   mobile: 'https://i.imgur.com/VpOclab.jpg',
   color: 'black'
 })
+
+useHead({
+  title: '蒔栽 | 享受種植的美好'
+})
 </script>
 
 <template>
@@ -34,9 +38,9 @@ const banner = reactive({
       <p class="title">歡迎來到蒔栽</p>
       <i class="arrow"></i>
       <p class="text">
-        蒔栽想把種植多肉植物的各種美好分享給大家，<br />
+        蒔栽想把種植植物的各種美好分享給大家，<br />
         就像好友之間訴說著彼此的種植經驗、以及對於美好生活的想像。<br />
-        經歷過工作與生活的衝撞，多肉植物讓兩者產生平衡，<br />
+        經歷過工作與生活的衝撞，植物讓兩者產生平衡，<br />
         透過養護植物，也時時提醒著看照自己的心情，<br />
         慢下腳步感受情緒，活力有朝氣的過每一天。
       </p>

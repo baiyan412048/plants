@@ -195,17 +195,18 @@ definePageMeta({
 <template>
   <div class="main-wrapper">
     <div class="checkout-wrapper">
-      <pre>{{ cartStore.cartList }}</pre>
       <div class="container">
         <form class="form" @submit.prevent="submitForm">
           <input id="submit" type="submit" />
           <p class="title">結帳資訊</p>
           <div class="block">
-            <div>
+            <div class="head">
               <p class="tip">帳單資訊</p>
-              <button type="button" @click.prevent="billSameAsMember">
-                同會員資訊
-              </button>
+              <BaseButton
+                :type="'button'"
+                :text="'同會員資訊'"
+                @to-click="billSameAsMember"
+              />
             </div>
             <div class="group">
               <div class="half">
@@ -276,11 +277,13 @@ definePageMeta({
             </div>
           </div>
           <div class="block">
-            <div>
+            <div class="head">
               <p class="tip">配送方式</p>
-              <button type="button" @click.prevent="shippingSameAsMember">
-                同會員資訊
-              </button>
+              <BaseButton
+                :type="'button'"
+                :text="'同會員資訊'"
+                @to-click="shippingSameAsMember"
+              />
             </div>
             <div class="group">
               <div class="full">
@@ -400,7 +403,7 @@ definePageMeta({
           <div class="list">
             <ul>
               <li v-for="(item, key) in cartStore.cartList" :key="key">
-                <CartItem :item="item" :in-checkout="true" />
+                <CartItem :item="item" :in-checkout-page="true" />
               </li>
             </ul>
           </div>
@@ -421,7 +424,6 @@ definePageMeta({
             </p>
           </div>
           <div class="block button-group">
-            <!-- <BaseButton :to="'/checkout/success'" :text="'確認購買'" /> -->
             <BaseButton
               :type="'label'"
               :for="'submit'"
@@ -466,8 +468,13 @@ definePageMeta({
         padding-bottom: 30px
         margin-bottom: 30px
         border-bottom: 1px solid $gray
+    .head
+      margin-bottom: 30px
+      display: flex
+      align-items: center
+      justify-content: space-between
+
     .tip
-      margin-bottom: 20px
       font-size: px(18)
       line-height: 1.2
     .group

@@ -2,6 +2,7 @@
 import { useNewsSetting, useNewsCatalog } from '@/stores/news'
 import { useArticleSetting, useArticleCatalog } from '@/stores/article'
 import { useProductSetting, useProductCatalog } from '@/stores/product'
+import { useFAQSetting, useFAQCatalog } from '@/stores/faq'
 
 // 最新消息單元設定
 const newsSettingStore = useNewsSetting()
@@ -50,6 +51,22 @@ const productData = computed(() => {
     catalog: productCatalog.value.data
   }
 })
+
+// 常見問題單元設定
+const faqSettingStore = useFAQSetting()
+const { getFAQSetting } = faqSettingStore
+const { data: faqSetting } = await getFAQSetting()
+
+// 常見問題分類
+const faqCatalogStore = useFAQCatalog()
+const { getFAQCatalog } = faqCatalogStore
+const { data: faqCatalog } = await getFAQCatalog()
+const faqData = computed(() => {
+  return {
+    setting: faqSetting.value.data[0].name,
+    catalog: faqCatalog.value.data
+  }
+})
 </script>
 
 <template>
@@ -92,22 +109,12 @@ const productData = computed(() => {
             </ul>
           </div>
           <div>
-            <NuxtLink class="b" to="/faq">常見問題</NuxtLink>
+            <NuxtLink class="b" to="/faq">{{ faqData.setting }}</NuxtLink>
             <ul>
-              <li>
-                <NuxtLink>商品相關</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink>訂單相關</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink>物流相關</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink>送禮相關</NuxtLink>
-              </li>
-              <li>
-                <NuxtLink>退換貨相關</NuxtLink>
+              <li v-for="(catalog, key) in faqData.catalog" :key="key">
+                <NuxtLink :to="`/faq/${catalog.catalog}`">{{
+                  catalog.catalog
+                }}</NuxtLink>
               </li>
             </ul>
           </div>

@@ -21,8 +21,7 @@ const password = ref('aaaa0000')
 const notice = ref('')
 
 const submitForm = async () => {
-  const { data, error } = await toLogin(email.value, password.value)
-  const memberData = computed(() => data.value.data)
+  const { error } = await toLogin(email.value, password.value)
 
   if (error.value?.data) {
     notice.value = error.value?.data
@@ -37,13 +36,6 @@ const submitForm = async () => {
 
   // 清空錯誤提示訊息
   notice.value = ''
-  // 切換登入狀態
-  memberStore.loginState = true
-  // 更新會員資訊
-  memberStore.profile.id = memberData.value._id
-  memberStore.profile.name = memberData.value.name
-  memberStore.profile.email = memberData.value.email
-  memberStore.profile.favorite = memberData.value.favorite
 
   // 訊息通知
   addToast({

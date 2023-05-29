@@ -9,7 +9,7 @@ const orderStore = useOrder()
 // 訂單 method
 const { getMemberOrder } = orderStore
 
-const { data } = await getMemberOrder('647159c05a44f462ac8521d5')
+const { data } = await getMemberOrder(query.orderId)
 const order = computed(() => data.value.data)
 
 const payment = (value) => {
@@ -30,7 +30,7 @@ useHead({
 })
 
 definePageMeta({
-  middleware: 'check-member'
+  middleware: ['check-member', 'check-order-id']
 })
 </script>
 
@@ -39,7 +39,6 @@ definePageMeta({
     <div class="checkout-wrapper">
       <div class="container">
         <p class="title">已成功付款</p>
-        <!-- <pre>{{ order }}</pre> -->
         <div class="group">
           <div class="block bill">
             <p class="tip">帳單資訊</p>
@@ -63,6 +62,9 @@ definePageMeta({
               <li>
                 <span>地址 :</span>{{ order.shipping.zone }} -
                 {{ order.shipping.address }}
+              </li>
+              <li>
+                <span>配送方式 :</span> {{ shipping(order.shipping.type) }}
               </li>
               <li><span>備註 :</span>{{ order.shipping.remark }}</li>
             </ul>

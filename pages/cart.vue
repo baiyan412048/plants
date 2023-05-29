@@ -24,7 +24,7 @@ const { addToast } = toastStore
 // 購物車 store
 const cartStore = useCart()
 // 購物車 method
-const { removeCartItem } = cartStore
+const { removeCartItem, removeCartPurchaseItem } = cartStore
 // 增加數量
 const plus = (item) => {
   if (item.count == item.stock) return
@@ -37,11 +37,20 @@ const minus = (item) => {
 }
 // 移除購物車商品
 const onRemoveCartItem = (id) => {
+  removeCartItem(id)
   addToast({
     title: '成功移除商品',
     state: 'success'
   })
-  removeCartItem(id)
+}
+
+// 移除購物車加購品
+const onRemovePurchase = (productId, purchaseId) => {
+  removeCartPurchaseItem(productId, purchaseId)
+  addToast({
+    title: '成功移除加購品',
+    state: 'success'
+  })
 }
 
 // 頁面麵包屑
@@ -93,66 +102,76 @@ onMounted(async () => {
       <div class="outline">
         <CommonBreadcrumbs :breadcrumbs="breadcrumbs" />
       </div>
-      <BaseNoResult v-if="!cartStore.cartList.length">
-        <p>購物車內無新增商品</p>
-      </BaseNoResult>
-      <div v-else class="info">
-        <div class="info-list">
-          <ul>
-            <li v-for="(item, key) in cartStore.cartList" :key="key">
-              <CartItem
-                :item="item"
-                @plus="plus"
-                @minus="minus"
-                @remove-item="onRemoveCartItem"
-              />
-            </li>
-          </ul>
-        </div>
-        <div class="info-aside">
-          <div class="block">
-            <p>
-              <span>小計</span>
-              <span>NT ${{ cartStore.subtotalPrice.toLocaleString() }}</span>
-            </p>
-            <p>
-              <span>預估運費</span>
-              <span>NT ${{ cartStore.fee.toLocaleString() }}</span>
-            </p>
+      <ClientOnly>
+        <template #fallback>
+          <BaseLoadingBlock />
+        </template>
+        <BaseNoResult v-if="!cartStore.cartList.length">
+          <p>購物車內無新增商品</p>
+        </BaseNoResult>
+        <template v-else>
+          <div class="info">
+            <div class="info-list">
+              <ul>
+                <li v-for="(item, key) in cartStore.cartList" :key="key">
+                  <CartItem
+                    :item="item"
+                    @plus="plus"
+                    @minus="minus"
+                    @remove-item="onRemoveCartItem"
+                    @remove-purchase="onRemovePurchase"
+                  />
+                </li>
+              </ul>
+            </div>
+            <div class="info-aside">
+              <div class="block">
+                <p>
+                  <span>小計</span>
+                  <span
+                    >NT ${{ cartStore.subtotalPrice.toLocaleString() }}</span
+                  >
+                </p>
+                <p>
+                  <span>預估運費</span>
+                  <span>NT ${{ cartStore.fee.toLocaleString() }}</span>
+                </p>
+              </div>
+              <div class="block">
+                <p>
+                  <span>總計</span>
+                  <span>NT ${{ cartStore.totalPrice.toLocaleString() }}</span>
+                </p>
+              </div>
+              <div class="block button-group">
+                <BaseButton
+                  v-if="!memberStore.loginState"
+                  :to="'/member/login'"
+                  :text="'會員登入'"
+                />
+                <BaseButton :to="'/checkout'" :text="'前往結帳'" />
+              </div>
+            </div>
           </div>
-          <div class="block">
-            <p>
-              <span>總計</span>
-              <span>NT ${{ cartStore.totalPrice.toLocaleString() }}</span>
-            </p>
+          <div class="may-like">
+            <p class="tip">也許你會喜歡</p>
+            <Swiper
+              :slides-per-view="4"
+              :space-between="50"
+              :modules="modules"
+              :autoplay="{
+                delay: 2500,
+                disableOnInteraction: false
+              }"
+              :speed="800"
+            >
+              <SwiperSlide v-for="(item, key) in otherDetail" :key="key">
+                <ProductCard :index="key" :product="item" />
+              </SwiperSlide>
+            </Swiper>
           </div>
-          <div class="block button-group">
-            <BaseButton
-              v-if="!memberStore.loginState"
-              :to="'/member/login'"
-              :text="'會員登入'"
-            />
-            <BaseButton :to="'/checkout'" :text="'前往結帳'" />
-          </div>
-        </div>
-      </div>
-      <div v-if="cartStore.cartList.length" class="may-like">
-        <p class="tip">也許你會喜歡</p>
-        <Swiper
-          :slides-per-view="4"
-          :space-between="50"
-          :modules="modules"
-          :autoplay="{
-            delay: 2500,
-            disableOnInteraction: false
-          }"
-          :speed="800"
-        >
-          <SwiperSlide v-for="(item, key) in otherDetail" :key="key">
-            <ProductCard :index="key" :product="item" />
-          </SwiperSlide>
-        </Swiper>
-      </div>
+        </template>
+      </ClientOnly>
     </div>
   </div>
 </template>

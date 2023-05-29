@@ -1,9 +1,15 @@
 <script setup>
 import { useOrder } from '@/stores/order'
 import { usePayment } from '@/stores/payment'
+import { useCart } from '@/stores/cart'
 
 const route = useRoute()
 const { query } = route
+
+// 購物車 store
+const cartStore = useCart()
+// 購物車 method
+const { resetCartList } = cartStore
 
 // 訂單 store
 const orderStore = useOrder()
@@ -29,6 +35,7 @@ const postData = {
 if (confirm.value.returnCode == '0000') {
   postData.bill.state = true
   const { data: order } = await postMemberOrder(postData)
+  resetCartList()
   navigateTo(`/checkout/success?orderId=${order.value.data._id}`)
 } else {
   // 失敗

@@ -58,7 +58,7 @@ const shipping = (value) => {
             </div>
             <div class="state">
               <p class="sub">配送狀態</p>
-              <p>配送中</p>
+              <p>{{ item.shipping.state }}</p>
             </div>
           </NuxtLink>
         </li>

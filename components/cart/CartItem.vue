@@ -6,7 +6,7 @@ const props = defineProps({
       return {}
     }
   },
-  inCheckout: {
+  inCheckoutPage: {
     type: Boolean,
     default() {
       return false
@@ -14,7 +14,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['plus', 'minus', 'removeItem'])
+const emit = defineEmits(['plus', 'minus', 'removeItem', 'removePurchase'])
 
 const onPlus = () => {
   emit('plus', props.item)
@@ -33,7 +33,7 @@ const onMinus = () => {
       <div class="content">
         <p class="title">{{ props.item.title }}</p>
         <p class="catalog">{{ props.item.catalog }}</p>
-        <div v-if="props.inCheckout" class="number">
+        <div v-if="props.inCheckoutPage" class="number">
           數量: {{ props.item.count }}
         </div>
         <div v-else class="control">
@@ -61,7 +61,11 @@ const onMinus = () => {
         :key="key"
         class="item"
       >
-        <div v-if="!props.inCheckout" class="delete">
+        <div
+          v-if="!props.inCheckoutPage"
+          class="delete"
+          @click="$emit('removePurchase', props.item.id, purchase._id)"
+        >
           <Icon name="Delete" size="20" />
         </div>
         <div class="photo">
