@@ -29,8 +29,8 @@ export default defineNuxtConfig({
       ],
       meta: [{ name: 'theme-color', content: '#34BD32' }]
     }
-  },
-  generate: {
-    routes: ['/privacy']
   }
+  // generate: {
+  //   routes: ['/privacy']
+  // }
 })
