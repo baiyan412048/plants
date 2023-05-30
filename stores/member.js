@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useMember = defineStore('user', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   const loginState = useCookie('loginState')
   loginState.value = loginState.value || false
@@ -20,6 +20,9 @@ export const useMember = defineStore('user', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/member/${id}`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -36,6 +39,9 @@ export const useMember = defineStore('user', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/member/${id}`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           method: 'PUT',
           body: postData,
           pick: ['data']
@@ -54,6 +60,9 @@ export const useMember = defineStore('user', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/member/${id}/password`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           method: 'PUT',
           body: postData,
           pick: ['data']
@@ -80,6 +89,9 @@ export const useMember = defineStore('user', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/member/${id}/favorite`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           method: 'POST',
           body: postData,
           pick: ['data']
@@ -98,6 +110,9 @@ export const useMember = defineStore('user', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/member/${id}/favorite`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           method: 'DELETE',
           body: postData,
           pick: ['data']
@@ -115,6 +130,9 @@ export const useMember = defineStore('user', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/member`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           method: 'POST',
           body: postData,
           pick: ['data']
@@ -132,6 +150,9 @@ export const useMember = defineStore('user', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/member/login`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           method: 'POST',
           body: {
             email,

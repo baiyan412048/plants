@@ -31,6 +31,7 @@ const confirm = computed(() => data.value.data)
 const postData = {
   ...paymentStore.order
 }
+
 // 付款成功
 if (confirm.value.returnCode == '0000') {
   postData.bill.state = true

@@ -4,6 +4,10 @@ import { useOrder } from '@/stores/order'
 const route = useRoute()
 const { query } = route
 
+if (!query.orderId) {
+  navigateTo('/product')
+}
+
 // 訂單 store
 const orderStore = useOrder()
 // 訂單 method
@@ -30,7 +34,7 @@ useHead({
 })
 
 definePageMeta({
-  middleware: ['check-member', 'check-order-id']
+  middleware: ['check-member']
 })
 </script>
 
@@ -38,7 +42,7 @@ definePageMeta({
   <div class="main-wrapper">
     <div class="checkout-wrapper">
       <div class="container">
-        <p class="title">已成功付款</p>
+        <p class="title">已成功送出訂單</p>
         <div class="group">
           <div class="block bill">
             <p class="tip">帳單資訊</p>
@@ -49,7 +53,7 @@ definePageMeta({
               <li><span>付款方式 :</span> {{ payment(order.bill.payment) }}</li>
               <li>
                 <span>付款狀態 :</span
-                >{{ order.bill.state ? '付款成功' : '付款失敗' }}
+                >{{ order.bill.state ? '付款成功' : '尚未付款' }}
               </li>
             </ul>
           </div>

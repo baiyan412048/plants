@@ -42,7 +42,14 @@ useHead({
         <p>
           此網站僅做學術練習用途，請勿於網站上輸入私密資訊。<br />網站所有圖片的來源於
           <a href="https://unsplash.com/">Unsplash</a><br />所有文章皆使用
-          <a href="https://chat.openai.com/">ChatGPT</a> 生成
+          <a href="https://chat.openai.com/">ChatGPT</a>
+          生成<br />部分圖片素材源自於
+          <a
+            href="https://www.freepik.com/free-vector/different-potted-houseplants-flat-vector-illustrations-set-indoor-flowers-plants-flowerpots-vases-alocasia-begonia-pots-isolated-white-background-interior-urban-jungle-concept_26921673.htm#query=indoor%20plants&position=9&from_view=search&track=ais"
+            >Freepik by pch.vector</a
+          ><br />網站上的字型皆使用
+          <a href="https://fonts.google.com/">Google font</a><br />( Noto Sans
+          Japanese & Noto Serif Japanese )
         </p>
       </div>
     </div>

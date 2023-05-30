@@ -6,7 +6,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseUrl: 'https://192.168.100.28:3001',
-      apiBaseUrl: 'http://localhost:3000'
+      apiBaseUrl: 'http://localhost:3000',
+      apiKey: 'baiyan_plants'
     }
   },
   css: ['@/assets/base/_reset.sass', '@/assets/base/_base.sass'],
@@ -25,7 +26,8 @@ export default defineNuxtConfig({
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;500;700&display=swap'
         }
-      ]
+      ],
+      meta: [{ name: 'theme-color', content: '#34BD32' }]
     }
   },
   generate: {

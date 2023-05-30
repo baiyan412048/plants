@@ -2,13 +2,16 @@ import { defineStore } from 'pinia'
 
 export const useOrder = defineStore('order', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   const getMemberOrder = async (id) => {
     try {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/order${id ? `/${id}` : ''}`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -24,6 +27,9 @@ export const useOrder = defineStore('order', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/order/`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           method: 'POST',
           body: postData,
           pick: ['data']

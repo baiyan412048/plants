@@ -188,6 +188,7 @@ useHead({
     font-size: px(16)
     line-height: 1.5
     letter-spacing: .5px
+    white-space: break-spaces
     &:not(:first-child)
       margin-top: 30px
   .other-group

@@ -50,7 +50,7 @@ const shipping = (value) => {
             </div>
             <div class="state">
               <p class="sub">付款狀態</p>
-              <p>{{ item.bill.state ? '付款成功' : '付款失敗' }}</p>
+              <p>{{ item.bill.state ? '付款成功' : '尚未付款' }}</p>
             </div>
             <div class="shipping">
               <p class="sub">配送方式</p>

@@ -197,7 +197,9 @@ onMounted(() => {
               <h1 class="title">{{ params.title }}</h1>
               <p class="dep">{{ dep }}</p>
               <div class="price">
-                <p class="delete">NT ${{ outline.price.toLocaleString() }}</p>
+                <p class="delete">
+                  NT ${{ outline.originalPrice.toLocaleString() }}
+                </p>
                 <p>NT ${{ outline.price.toLocaleString() }}</p>
               </div>
               <div class="collapse">
@@ -515,6 +517,7 @@ onMounted(() => {
     font-size: px(16)
     line-height: 1.5
     letter-spacing: .5px
+    white-space: break-spaces
     &:not(:first-child)
       margin-top: 30px
 // .info-content

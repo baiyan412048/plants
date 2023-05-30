@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 // 單元設定
 export const useArticleSetting = defineStore('articleSetting', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   // 取得單元設定
   const getArticleSetting = async () => {
@@ -11,6 +11,9 @@ export const useArticleSetting = defineStore('articleSetting', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/article/setting`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -27,13 +30,16 @@ export const useArticleSetting = defineStore('articleSetting', () => {
 // 文章分類
 export const useArticleCatalog = defineStore('articleCatalog', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   const getArticleCatalog = async () => {
     try {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/article/catalog`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -52,7 +58,7 @@ export const useArticleCatalog = defineStore('articleCatalog', () => {
 // 文章 outline
 export const useArticleOutline = defineStore('articleOutline', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   const articleActiveCatalog = ref('全部類別')
 
@@ -61,6 +67,9 @@ export const useArticleOutline = defineStore('articleOutline', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/article`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -80,13 +89,16 @@ export const useArticleOutline = defineStore('articleOutline', () => {
 // 文章 detail
 export const useArticleDetail = defineStore('articleDetail', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   const getArticleDetail = async (catalog, title) => {
     try {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/article/${catalog}${title ? `/${title}` : ''}`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )

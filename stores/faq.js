@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 // 單元設定
 export const useFAQSetting = defineStore('faqSetting', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   // 取得單元設定
   const getFAQSetting = async () => {
@@ -11,6 +11,9 @@ export const useFAQSetting = defineStore('faqSetting', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/faq/setting`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -27,13 +30,16 @@ export const useFAQSetting = defineStore('faqSetting', () => {
 // 常見問題分類
 export const useFAQCatalog = defineStore('faqCatalog', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   const getFAQCatalog = async () => {
     try {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/faq/catalog`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -52,7 +58,7 @@ export const useFAQCatalog = defineStore('faqCatalog', () => {
 // 常見問題 detail
 export const useFAQDetail = defineStore('faqDetail', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   const faqActiveCatalog = ref('全部類別')
 
@@ -63,6 +69,9 @@ export const useFAQDetail = defineStore('faqDetail', () => {
           title ? `/${title}` : ''
         }`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )

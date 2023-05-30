@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 // 單元設定
 export const useProductSetting = defineStore('productSetting', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   // 取得單元設定
   const getProductSetting = async () => {
@@ -11,6 +11,9 @@ export const useProductSetting = defineStore('productSetting', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/product/setting`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -27,13 +30,16 @@ export const useProductSetting = defineStore('productSetting', () => {
 // 產品分類
 export const useProductCatalog = defineStore('productCatalog', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   const getProductCatalog = async () => {
     try {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/product/catalog`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -52,7 +58,7 @@ export const useProductCatalog = defineStore('productCatalog', () => {
 // 產品篩選
 export const useProductFilter = defineStore('productFilter', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   // 取得產品尺寸
   const getProductSize = async () => {
@@ -60,6 +66,9 @@ export const useProductFilter = defineStore('productFilter', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/product/size`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -76,6 +85,9 @@ export const useProductFilter = defineStore('productFilter', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/product/diff`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -92,6 +104,9 @@ export const useProductFilter = defineStore('productFilter', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/product/env`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -112,7 +127,7 @@ export const useProductFilter = defineStore('productFilter', () => {
 // 產品 outline
 export const useProductOutline = defineStore('productOutline', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   const productIsInnerPage = ref(false)
   const productActiveCatalog = reactive({
@@ -125,6 +140,9 @@ export const useProductOutline = defineStore('productOutline', () => {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/product`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )
@@ -145,13 +163,16 @@ export const useProductOutline = defineStore('productOutline', () => {
 // 產品 detail
 export const useProductDetail = defineStore('productDetail', () => {
   const runtimeConfig = useRuntimeConfig()
-  const { apiBaseUrl: API_BASE_URL } = runtimeConfig.public
+  const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   const getProductDetail = async (catalog, title) => {
     try {
       const { data, pending, error, refresh } = await useFetch(
         `${API_BASE_URL}/api/product/${catalog}${title ? `/${title}` : ''}`,
         {
+          headers: {
+            'x-api-key': API_KEY
+          },
           pick: ['data']
         }
       )

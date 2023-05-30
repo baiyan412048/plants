@@ -35,6 +35,7 @@ useHead({
   <div class="main-wrapper">
     <CommonBanner :color="banner.color" :title="'蒔栽'" :image="banner" />
     <div class="outline">
+      <img src="/background.svg" alt="" />
       <p class="title">歡迎來到蒔栽</p>
       <i class="arrow"></i>
       <p class="text">
@@ -70,9 +71,19 @@ useHead({
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
 
+.main-wrapper
+  padding-bottom: 100px
+
 .outline
-  padding: 50px 60px
+  padding: 80px 60px
+  position: relative
   text-align: center
+  img
+    position: absolute
+    z-index: -1
+    bottom: 0
+    left: 50%
+    transform: translate3d(-50%, 0, 0)
   .title
     position: relative
     color: $black

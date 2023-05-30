@@ -35,7 +35,7 @@ const shipping = (value) => {
       </div>
       <div class="state">
         <p class="sub">付款狀態</p>
-        <p>{{ order.bill.state ? '付款成功' : '付款失敗' }}</p>
+        <p>{{ order.bill.state ? '付款成功' : '尚未付款' }}</p>
       </div>
       <div class="state">
         <p class="sub">配送方式</p>
@@ -54,7 +54,7 @@ const shipping = (value) => {
         <li><span>付款方式 :</span> {{ payment(order.bill.payment) }}</li>
         <li>
           <span>付款狀態 :</span
-          >{{ order.bill.state ? '付款成功' : '付款失敗' }}
+          >{{ order.bill.state ? '付款成功' : '尚未付款' }}
         </li>
       </ul>
     </div>

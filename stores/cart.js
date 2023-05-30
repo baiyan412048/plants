@@ -7,9 +7,7 @@ export const useCart = defineStore('cart', () => {
   const cartList = reactive(cartListCookie.value)
   // 小計
   const subtotalPrice = computed(() => {
-    const cartPriceGroup = cartList.map(
-      (obj) => parseInt(obj.total) * obj.count
-    )
+    const cartPriceGroup = cartList.map((obj) => parseInt(obj.total))
     return cartPriceGroup.length
       ? cartPriceGroup.reduce(
           (accumulator, currentValue) => accumulator + currentValue
@@ -18,7 +16,7 @@ export const useCart = defineStore('cart', () => {
   })
   // 運費
   const fee = computed(() => {
-    return 100
+    return 0
   })
   // 總計
   const totalPrice = computed(() => {

@@ -14,6 +14,8 @@ const profileTemp = reactive({
   name: profile.value.name,
   email: profile.value.email,
   phone: profile.value.phone,
+  city: profile.value.city,
+  zone: profile.value.zone,
   address: profile.value.address,
   birthday: useDateFormat(profile.value.birthday, 'YYYY-MM-DD').value
 })
@@ -22,6 +24,32 @@ const profileTemp = reactive({
 const toastStore = useToast()
 // 通知 method
 const { addToast } = toastStore
+
+// 縣市列表
+const cityList = [
+  '台北市',
+  '基隆市',
+  '新北市',
+  '宜蘭縣',
+  '桃園市',
+  '新竹市',
+  '新竹縣',
+  '苗栗縣',
+  '台中市',
+  '彰化縣',
+  '南投縣',
+  '嘉義市',
+  '嘉義縣',
+  '雲林縣',
+  '台南市',
+  '高雄市',
+  '澎湖縣',
+  '金門縣',
+  '屏東縣',
+  '台東縣',
+  '花蓮縣',
+  '連江縣'
+]
 
 const submitForm = async () => {
   const postData = { id: profile.value._id, ...profileTemp }
@@ -81,6 +109,25 @@ const submitForm = async () => {
           required
         />
       </div>
+      <div class="half">
+        <label for="city">縣市</label>
+        <select v-model="profileTemp.city" name="city">
+          <option value="" selected disabled hidden>請選擇縣市</option>
+          <option v-for="(item, key) in cityList" :key="key" :value="item">
+            {{ item }}
+          </option>
+        </select>
+      </div>
+      <div class="half">
+        <label for="zone">區碼</label>
+        <input
+          id="zone"
+          v-model="profileTemp.zone"
+          type="text"
+          placeholder="請輸入區碼"
+          required
+        />
+      </div>
       <div class="full">
         <label for="address">地址</label>
         <input
@@ -129,7 +176,8 @@ const submitForm = async () => {
       margin-bottom: 10px
       font-size: px(16)
       line-height: 1.2
-    input
+    input,
+    select
       padding: 10px
       border-radius: 8px
       border: 1px solid $gray

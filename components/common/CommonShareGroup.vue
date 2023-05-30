@@ -1,22 +1,84 @@
-<script setup></script>
+<script setup>
+import { useToast } from '@/stores/toast'
+
+// 通知 store
+const toastStore = useToast()
+// 通知 method
+const { addToast } = toastStore
+
+const copyUrl = ref('')
+
+const shareWeb = (type) => {
+  const share = {
+    baseUrl: encodeURIComponent(document.URL),
+    targetUrl: ''
+  }
+
+  switch (type) {
+    case 'facebook':
+      share.targetUrl = 'https://www.facebook.com/sharer/sharer.php?u='
+      break
+    case 'line':
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        share.targetUrl = 'http://line.naver.jp/R/msg/text/?'
+      } else {
+        share.targetUrl = 'https://lineit.line.me/share/ui?url='
+      }
+      break
+    case 'url':
+      navigator.clipboard.writeText(copyUrl).then(() => {
+        // 訊息通知
+        addToast({
+          title: '已成功複製網址',
+          state: 'success'
+        })
+      })
+
+      return
+    default:
+      // 無以上 type 則直接 return
+      return
+  }
+
+  share.baseUrl = share.baseUrl
+    .replace('?', '%3F')
+    .replace(new RegExp('&', 'g'), '%26')
+
+  if (type == 'line') {
+    // line 需帶入原始網址
+    window.open(`${share.targetUrl}${encodeURIComponent(document.URL)}`)
+  } else {
+    window.open(`${share.targetUrl}${share.baseUrl}&quote=${share.baseUrl}`)
+  }
+}
+
+onMounted(() => {
+  copyUrl.value = window.location.href
+})
+</script>
 
 <template>
   <div class="share-group">
+    <input v-model="copyUrl" type="hidden" readonly />
     <span>SHARE</span>
     <ul>
       <li>
-        <a href="javascript:;">
+        <a href="javascript:;" @click.prevent="shareWeb('facebook')">
           <Icon name="ri:facebook-fill" />
         </a>
       </li>
       <li>
-        <a href="javascript:;">
-          <Icon name="ri:instagram-line" />
+        <a href="javascript:;" @click.prevent="shareWeb('line')">
+          <Icon name="ri:line-fill" />
         </a>
       </li>
       <li>
-        <a href="javascript:;">
-          <Icon name="ri:line-fill" />
+        <a href="javascript:;" @click.prevent="shareWeb('url')">
+          <Icon name="ri:external-link-line" />
         </a>
       </li>
     </ul>

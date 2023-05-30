@@ -1,4 +1,5 @@
 <script setup>
+import { useOrder } from '@/stores/order'
 import { useMember } from '@/stores/member'
 import { useCart } from '@/stores/cart'
 import { usePayment } from '@/stores/payment'
@@ -10,13 +11,20 @@ const { getDetailProfile } = memberStore
 const { data: profile } = await getDetailProfile(memberStore.profile.id)
 const memberProfile = computed(() => profile.value.data)
 
+// 訂單 store
+const orderStore = useOrder()
+// 訂單 method
+const { postMemberOrder } = orderStore
+
 // 購物車 store
 const cartStore = useCart()
+// 購物車 method
+const { resetCartList } = cartStore
 
 // 付款 store
 const paymentStore = usePayment()
 // 訂單 method
-const { postPaymentRequest } = paymentStore
+const { updateOrderInfo, postPaymentRequest } = paymentStore
 
 // 付款方式
 const payment = ref('linepay')
@@ -52,6 +60,7 @@ const shippingSameAsMember = () => {
   shippingInfo.zone = memberProfile.value.zone
   shippingInfo.address = memberProfile.value.address
 }
+
 // 縣市列表
 const cityList = [
   '台北市',
@@ -77,6 +86,29 @@ const cityList = [
   '花蓮縣',
   '連江縣'
 ]
+
+// 更新訂單資訊
+const onUpdateOrderInfo = (productTemp, purchaseTemp) => {
+  const target = {
+    memberId: memberProfile.value._id,
+    bill: {
+      ...billInfo,
+      payment: payment.value
+    },
+    shipping: {
+      type: shippingType.value,
+      ...shippingInfo
+    },
+    price: {
+      total: cartStore.totalPrice,
+      fee: cartStore.fee
+    },
+    products: productTemp,
+    purchase: purchaseTemp
+  }
+
+  updateOrderInfo(target)
+}
 
 const submitForm = async () => {
   const runtimeConfig = useRuntimeConfig()
@@ -121,6 +153,23 @@ const submitForm = async () => {
     )
   })
 
+  // 來店付款直接建立訂單
+  if (payment.value !== 'linepay') {
+    // 更新結帳資訊
+    onUpdateOrderInfo(productTemp, purchaseTemp)
+    const postData = {
+      ...paymentStore.order
+    }
+    // 更新付款金額
+    paymentStore.amount = cartStore.subtotalPrice.value
+    const { data: order } = await postMemberOrder(postData)
+    // 清空購物車
+    resetCartList()
+    // 跳轉到成功畫面
+    navigateTo(`/checkout/success?orderId=${order.value.data._id}`)
+    return
+  }
+
   const postData = {
     // 商品
     products: productTemp.map((obj) => {
@@ -151,25 +200,10 @@ const submitForm = async () => {
   // 結帳流程
   const { data } = await postPaymentRequest(postData)
   const request = computed(() => data.value.data)
-  console.log(request, 'request postPaymentRequest')
   // 成功
   if (request.value.returnCode == '0000') {
-    // 更新訂單資訊
-    paymentStore.order.memberId = memberProfile.value._id
-    paymentStore.order.bill = {
-      ...billInfo,
-      payment: payment.value
-    }
-    paymentStore.order.shipping = {
-      type: shippingType.value,
-      ...shippingInfo
-    }
-    paymentStore.order.price = {
-      total: cartStore.totalPrice,
-      fee: cartStore.fee
-    }
-    paymentStore.order.products = productTemp
-    paymentStore.order.purchase = purchaseTemp
+    // 更新結帳資訊
+    onUpdateOrderInfo(productTemp, purchaseTemp)
     // 更新付款金額
     paymentStore.amount = request.value.amount
     // 跳轉到付款畫面
@@ -414,7 +448,7 @@ definePageMeta({
             </p>
             <p>
               <span>運費</span>
-              <span>NT ${{ cartStore.fee.toLocaleString() }}</span>
+              <span>慶開幕，全館免運費</span>
             </p>
           </div>
           <div class="block">

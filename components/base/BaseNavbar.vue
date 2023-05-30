@@ -82,6 +82,8 @@ nav.navbar
   .logo
     display: block
     width: 150px
+    img
+      width: 80px
   .list
     margin: 0 auto
     display: flex
