@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-// http://localhost:3000/api/image/
-// https://api.baiyan777.com/api/image
+// http://localhost:3000
+// https://api.baiyan777.com
 export default defineNuxtConfig({
   modules: ['@pinia/nuxt', 'nuxt-icon', '@vueuse/nuxt'],
   runtimeConfig: {
