@@ -4,6 +4,8 @@ import { useMember } from '@/stores/member'
 import { useCart } from '@/stores/cart'
 import { usePayment } from '@/stores/payment'
 
+const domain = ref('')
+
 // 會員資料 store
 const memberStore = useMember()
 // 會員資料 method
@@ -181,8 +183,8 @@ const submitForm = async () => {
       }
     }),
     redirectUrls: {
-      confirmUrl: `${window.location.hostname}/checkout/check`,
-      cancelUrl: `${window.location.hostname}/checkout/fail`
+      confirmUrl: `${domain}/checkout/check`,
+      cancelUrl: `${domain}/checkout/fail`
     }
   }
   // 若有加購品則添加 purchase
@@ -213,6 +215,10 @@ const submitForm = async () => {
     return
   }
 }
+
+onMounted(() => {
+  domain.value = window.location.hostname
+})
 
 useHead({
   title: `結帳流程 | 蒔栽`,
