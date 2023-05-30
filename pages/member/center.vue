@@ -103,7 +103,6 @@ definePageMeta({
   .aside
     flex-shrink: 0
     width: 200px
-    .wrapper
     .link
       margin: 20px 0
       display: inline-block

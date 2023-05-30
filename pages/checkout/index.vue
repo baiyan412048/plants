@@ -181,8 +181,8 @@ const submitForm = async () => {
       }
     }),
     redirectUrls: {
-      confirmUrl: `${BASE_URL}/checkout/check`,
-      cancelUrl: `${BASE_URL}/checkout/fail`
+      confirmUrl: `${window.location.hostname}/checkout/check`,
+      cancelUrl: `${window.location.hostname}/checkout/fail`
     }
   }
   // 若有加購品則添加 purchase

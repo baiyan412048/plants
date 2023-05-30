@@ -5,8 +5,7 @@ export default defineNuxtConfig({
   modules: ['@pinia/nuxt', 'nuxt-icon', '@vueuse/nuxt'],
   runtimeConfig: {
     public: {
-      baseUrl: 'https://192.168.100.28:3001',
-      apiBaseUrl: 'http://localhost:3000',
+      apiBaseUrl: 'https://api.baiyan777.com',
       apiKey: 'baiyan_plants'
     }
   },
@@ -30,7 +29,4 @@ export default defineNuxtConfig({
       meta: [{ name: 'theme-color', content: '#34BD32' }]
     }
   }
-  // generate: {
-  //   routes: ['/privacy']
-  // }
 })
