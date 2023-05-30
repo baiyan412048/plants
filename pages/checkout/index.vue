@@ -183,8 +183,8 @@ const submitForm = async () => {
       }
     }),
     redirectUrls: {
-      confirmUrl: `${domain}/checkout/check`,
-      cancelUrl: `${domain}/checkout/fail`
+      confirmUrl: `${domain.value}/checkout/check`,
+      cancelUrl: `${domain.value}/checkout/fail`
     }
   }
   // 若有加購品則添加 purchase
