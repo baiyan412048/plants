@@ -217,7 +217,7 @@ const submitForm = async () => {
 }
 
 onMounted(() => {
-  domain.value = window.location.hostname
+  domain.value = window.location.origin
 })
 
 useHead({
