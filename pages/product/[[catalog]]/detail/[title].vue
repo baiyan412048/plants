@@ -280,7 +280,7 @@ onMounted(() => {
                 :loop="true"
               >
                 <SwiperSlide v-for="(src, key) in slides" :key="key">
-                  <img :src="src" alt="" />
+                  <nuxt-img :src="src" loading="lazy" />
                 </SwiperSlide>
               </Swiper>
               <div class="swiper-control">
@@ -303,11 +303,11 @@ onMounted(() => {
                 class="images"
                 :class="`-${paragraph.style}`"
               >
-                <img
+                <nuxt-img
                   v-for="(src, index) in paragraph.images"
                   :key="index"
                   :src="src"
-                  alt=""
+                  loading="lazy"
                 />
               </div>
               <div class="text">{{ paragraph.content }}</div>
@@ -324,11 +324,11 @@ onMounted(() => {
                 class="images"
                 :class="`-${paragraph.style}`"
               >
-                <img
+                <nuxt-img
                   v-for="(src, index) in paragraph.images"
                   :key="index"
                   :src="src"
-                  alt=""
+                  loading="lazy"
                 />
               </div>
               <div class="text">{{ paragraph.content }}</div>
@@ -341,11 +341,11 @@ onMounted(() => {
                 class="images"
                 :class="`-${paragraph.style}`"
               >
-                <img
+                <nuxt-img
                   v-for="(src, index) in paragraph.images"
                   :key="index"
                   :src="src"
-                  alt=""
+                  loading="lazy"
                 />
               </div>
               <div class="text">{{ paragraph.content }}</div>

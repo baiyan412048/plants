@@ -28,7 +28,7 @@ const onMinus = () => {
   <div class="cart-item">
     <div class="product">
       <div class="photo">
-        <img :src="props.item.image" alt="" />
+        <nuxt-img :src="props.item.image" loading="lazy" />
       </div>
       <div class="content">
         <p class="title">{{ props.item.title }}</p>
@@ -69,7 +69,7 @@ const onMinus = () => {
           <Icon name="Delete" size="20" />
         </div>
         <div class="photo">
-          <img :src="purchase.image" alt="" />
+          <nuxt-img :src="purchase.image" loading="lazy" />
         </div>
         <div class="content">
           <p class="title">{{ purchase.title }}</p>

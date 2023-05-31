@@ -6,6 +6,7 @@ const toastStore = useToast()
 
 <template>
   <div id="__layout">
+    <NuxtLoadingIndicator />
     <BaseNavbar />
     <main>
       <BaseToastGroup>

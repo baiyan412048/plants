@@ -28,7 +28,7 @@ const logout = () => {
   <nav class="navbar">
     <div class="container">
       <NuxtLink class="logo" to="/">
-        <img src="/LOGO.svg" alt="" />
+        <nuxt-img src="/LOGO.svg" loading="lazy" />
       </NuxtLink>
       <ul class="list">
         <li>

@@ -91,11 +91,11 @@ useHead({
               class="images"
               :class="`-${paragraph.style}`"
             >
-              <img
+              <nuxt-img
                 v-for="(src, index) in paragraph.images"
                 :key="index"
                 :src="src"
-                alt=""
+                loading="lazy"
               />
             </div>
             <div class="text">{{ paragraph.content }}</div>

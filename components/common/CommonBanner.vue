@@ -27,8 +27,7 @@ const fontColor = ref(props.color)
   <section class="common-banner" :class="fontColor">
     <picture>
       <source :srcset="props.image.mobile" media="(max-width: 767px)" />
-      <img :src="props.image.desktop" alt="" />
-      <!-- <img src="props.image.mobile" alt="" /> -->
+      <nuxt-img :src="props.image.desktop" loading="lazy" />
     </picture>
     <div class="container">
       <slot name="breadcrumbs"></slot>

@@ -2,7 +2,7 @@
 // http://localhost:3000
 // https://api.baiyan777.com
 export default defineNuxtConfig({
-  modules: ['@pinia/nuxt', 'nuxt-icon', '@vueuse/nuxt'],
+  modules: ['@pinia/nuxt', 'nuxt-icon', '@vueuse/nuxt', '@nuxt/image-edge'],
   runtimeConfig: {
     public: {
       apiBaseUrl: 'https://api.baiyan777.com',

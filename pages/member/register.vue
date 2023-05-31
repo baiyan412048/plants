@@ -1,10 +1,16 @@
 <script setup>
 import { useMember } from '@/stores/member'
+import { useToast } from '@/stores/toast'
 
 // 會員資料 store
 const memberStore = useMember()
 // 會員資料 method
 const { toRegister } = memberStore
+
+// 通知 store
+const toastStore = useToast()
+// 通知 method
+const { addToast } = toastStore
 
 const profileTemp = reactive({
   name: '',
@@ -43,10 +49,16 @@ const cityList = [
   '連江縣'
 ]
 
-const submitForm = () => {
+const submitForm = async () => {
   const postData = { ...profileTemp }
   postData.birthday = useDateFormat(postData.birthday, 'YYYY-MM-DD').value
-  toRegister(postData)
+  const { error } = await toRegister(postData)
+  if (error.value?.data) return
+  // 訊息通知
+  addToast({
+    title: '註冊成功',
+    state: 'success'
+  })
   navigateTo('/member/login')
 }
 

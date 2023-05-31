@@ -14,7 +14,7 @@ const emit = defineEmits(['togglePurchase'])
 <template>
   <div class="product-purchase" @click.prevent="$emit('togglePurchase')">
     <div class="photo">
-      <img :src="props.purchase.image" alt="" />
+      <nuxt-img :src="props.purchase.image" loading="lazy" />
     </div>
     <div class="content">
       <p class="title">{{ props.purchase.title }}</p>

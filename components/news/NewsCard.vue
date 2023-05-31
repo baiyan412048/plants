@@ -19,7 +19,7 @@ const props = defineProps({
       <div class="photo">
         <div class="inner">
           <p>Detail</p>
-          <img :src="props.news.image" alt="" />
+          <nuxt-img :src="props.news.image" loading="lazy" />
         </div>
         <span class="tag">{{ props.news.catalog.catalog }}</span>
       </div>

@@ -121,7 +121,7 @@ const faqData = computed(() => {
         </div>
         <div class="info">
           <NuxtLink class="info-logo" to="/">
-            <img src="/LOGO.svg" alt="" />
+            <nuxt-img src="/LOGO.svg" loading="lazy" />
           </NuxtLink>
           <div class="info-content">
             <p>TEL : 04 - 8888 - 8888</p>

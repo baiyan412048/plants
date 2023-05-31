@@ -1,5 +1,6 @@
 <script setup>
 import { useOrder } from '@/stores/order'
+import { useMember } from '@/stores/member'
 
 const route = useRoute()
 const { query } = route
@@ -8,13 +9,22 @@ if (!query.orderId) {
   navigateTo('/product')
 }
 
+// 會員資料 store
+const memberStore = useMember()
+// 會員資料 method
+const { getDetailProfile } = memberStore
+const { data: profile } = await getDetailProfile(memberStore.profile.id)
+
 // 訂單 store
 const orderStore = useOrder()
 // 訂單 method
 const { getMemberOrder } = orderStore
-
 const { data } = await getMemberOrder(query.orderId)
 const order = computed(() => data.value.data)
+
+if (!profile.value.data.order.includes(query.orderId)) {
+  navigateTo('/product')
+}
 
 const payment = (value) => {
   if (value == 'linepay') return 'Line pay'

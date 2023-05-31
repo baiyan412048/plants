@@ -96,7 +96,7 @@ const newItemTagState = computed(() => {
       <div class="photo">
         <div class="inner">
           <p>Detail</p>
-          <img :src="props.product.image" alt="" />
+          <nuxt-img :src="props.product.image" loading="lazy" />
         </div>
         <div v-if="newItemTagState" class="tag">NEW</div>
       </div>

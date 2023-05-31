@@ -35,7 +35,7 @@ useHead({
   <div class="main-wrapper">
     <CommonBanner :color="banner.color" :title="'蒔栽'" :image="banner" />
     <div class="outline">
-      <img src="/background.svg" alt="" />
+      <nuxt-img src="/background.svg" loading="lazy" />
       <p class="title">歡迎來到蒔栽</p>
       <i class="arrow"></i>
       <p class="text">
