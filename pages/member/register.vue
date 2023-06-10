@@ -53,7 +53,14 @@ const submitForm = async () => {
   const postData = { ...profileTemp }
   postData.birthday = useDateFormat(postData.birthday, 'YYYY-MM-DD').value
   const { error } = await toRegister(postData)
-  if (error.value?.data) return
+  if (error.value?.data) {
+    addToast({
+      title: '已有相同帳號',
+      text: error.value?.data,
+      state: 'error'
+    })
+    return
+  }
   // 訊息通知
   addToast({
     title: '註冊成功',

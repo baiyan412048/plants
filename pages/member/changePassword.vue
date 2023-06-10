@@ -54,6 +54,17 @@ const submitForm = async () => {
   // 導回登入畫面
   navigateTo('/member/login')
 }
+
+useHead({
+  title: '更換密碼 | 蒔栽',
+  bodyAttrs: {
+    class: 'member'
+  }
+})
+
+definePageMeta({
+  middleware: 'check-member'
+})
 </script>
 
 <template>

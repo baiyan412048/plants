@@ -75,6 +75,26 @@ export const useMember = defineStore('user', () => {
     }
   }
 
+  const PostMemberForgetPassword = async (postData) => {
+    try {
+      const { data, pending, error, refresh } = await useFetch(
+        `${API_BASE_URL}/api/member/forget`,
+        {
+          headers: {
+            'x-api-key': API_KEY
+          },
+          method: 'POST',
+          body: postData,
+          pick: ['data']
+        }
+      )
+
+      return { data, pending, error, refresh }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const addFavoriteProduct = async (postData) => {
     if (profile.id == '') {
       return {
@@ -202,6 +222,7 @@ export const useMember = defineStore('user', () => {
     toLogout,
     getDetailProfile,
     putDetailProfile,
-    putMemberPassword
+    putMemberPassword,
+    PostMemberForgetPassword
   }
 })
