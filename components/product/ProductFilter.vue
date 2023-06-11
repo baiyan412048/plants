@@ -34,7 +34,7 @@ const emit = defineEmits(['updateFilter'])
   </ul>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'

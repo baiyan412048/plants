@@ -37,7 +37,7 @@ const fontColor = ref(props.color)
   </section>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'

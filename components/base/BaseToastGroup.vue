@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .toast-group
   padding: 40px 20px
   position: fixed
