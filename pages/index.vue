@@ -14,7 +14,6 @@ const modules = [Pagination, Autoplay, EffectFade]
 const productOutlineStore = useProductOutline()
 // 產品 detail method
 const { getProductOutline } = productOutlineStore
-
 // 產品 detail
 const { data: product } = await getProductOutline()
 const productList = computed(() => product.value.data)

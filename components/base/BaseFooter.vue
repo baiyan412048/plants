@@ -44,6 +44,7 @@ const faqCatalogStore = useFAQCatalog()
 // 常見問題分類 method
 const { getFAQCatalog } = faqCatalogStore
 
+// get data
 const [
   { data: newsSetting },
   { data: newsCatalog },

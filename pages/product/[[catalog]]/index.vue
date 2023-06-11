@@ -17,22 +17,38 @@ const { params } = route
 const productSettingStore = useProductSetting()
 // 單元設定 method
 const { getProductSetting } = productSettingStore
-const { data: setting } = await getProductSetting()
 
 // 產品分類 store
 const productCatalogStore = useProductCatalog()
 // 產品分類 method
 const { getProductCatalog } = productCatalogStore
-// 產品分類
-const { data: catalog } = await getProductCatalog()
-const productCatalog = computed(() => catalog.value.data)
 
 // 產品篩選 store
 const productFilterStore = useProductFilter()
 // 產品篩選 method
 const { getProductSize, getProductDiff, getProductEnv } = productFilterStore
-// 產品篩選 - 尺寸
-const { data: size } = await getProductSize()
+
+// get data
+const [
+  { data: setting },
+  { data: catalog },
+  { data: size },
+  { data: diff },
+  { data: env },
+  { data: outline }
+] = await Promise.all([
+  getProductSetting(),
+  getProductCatalog(),
+  getProductSize(),
+  getProductDiff(),
+  getProductEnv(),
+  getProductOutline()
+])
+
+// 產品分類 data
+const productCatalog = computed(() => catalog.value.data)
+
+// 產品篩選 - 尺寸 data
 const productSize = computed(() => size.value.data)
 // 尺寸篩選儲存
 const filterSize = ref([])
@@ -44,8 +60,7 @@ const updateFilterSize = (selected, target) => {
   }
   filterSize.value.push(target.size)
 }
-// 產品篩選 - 難易度
-const { data: diff } = await getProductDiff()
+// 產品篩選 - 難易度 data
 const productDiff = computed(() => diff.value.data)
 // 難易度篩選儲存
 const filterDiff = ref([])
@@ -57,8 +72,7 @@ const updateFilterDiff = (selected, target) => {
   }
   filterDiff.value.push(target.diff)
 }
-// 產品篩選 - 環境
-const { data: env } = await getProductEnv()
+// 產品篩選 - 環境 data
 const productEnv = computed(() => env.value.data)
 // 環境篩選儲存
 const filterEnv = ref([])
@@ -77,8 +91,6 @@ const productOutlineStore = useProductOutline()
 const { getProductOutline } = productOutlineStore
 // 產品 active catalog
 const { productActiveCatalog } = storeToRefs(productOutlineStore)
-// 產品 outline
-const { data: outline } = await getProductOutline()
 
 // 單元名稱
 const title = ref(setting.value.data[0].name)
