@@ -10,14 +10,12 @@ const { params } = route
 const faqSettingStore = useFAQSetting()
 // 單元設定 method
 const { getFAQSetting } = faqSettingStore
-const { data: setting } = await getFAQSetting()
 
 // 常見問題分類 store
 const faqCatalogStore = useFAQCatalog()
 // 常見問題分類 method
 const { getFAQCatalog } = faqCatalogStore
-// 常見問題分類
-const { data: catalog } = await getFAQCatalog()
+// 常見問題分類 data
 const faqCatalog = computed(() => catalog.value.data)
 
 // 常見問題 detail store
@@ -27,8 +25,11 @@ const { getFAQDetail } = faqDetailStore
 // 常見問題 active catalog
 const { faqActiveCatalog } = storeToRefs(faqDetailStore)
 // 常見問題 detail
-const { data: detail } = await getFAQDetail()
 const faqDetail = computed(() => detail.value.data)
+
+// get data
+const [{ data: setting }, { data: catalog }, { data: detail }] =
+  await Promise.all([getFAQSetting(), getFAQCatalog(), getFAQDetail()])
 
 // 單元名稱
 const title = ref(setting.value.data[0].name)

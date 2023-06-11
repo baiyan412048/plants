@@ -9,17 +9,22 @@ const { params } = route
 const articleSettingStore = useArticleSetting()
 // 單元設定 method
 const { getArticleSetting } = articleSettingStore
-const { data: setting } = await getArticleSetting()
 
 // 文章 detail store
 const articleDetailStore = useArticleDetail()
 // 文章 detail method
 const { getArticleDetail } = articleDetailStore
-// 文章 detail
-const { data: detail } = await getArticleDetail(params.catalog, params.title)
+
+// get data
+const [{ data: setting }, { data: detail }, { data: allDetail }] =
+  await Promise.all([
+    getArticleSetting(),
+    getArticleDetail(params.catalog, params.title),
+    getArticleDetail(params.catalog)
+  ])
+
+// 文章 detail data
 const contents = computed(() => detail.value.data.contents)
-// 相同分類所有文章 detail
-const { data: allDetail } = await getArticleDetail(params.catalog)
 
 // 取得其他 detail
 const otherDetail = computed(() => {

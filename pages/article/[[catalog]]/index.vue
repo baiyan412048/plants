@@ -14,15 +14,11 @@ const { params } = route
 const articleSettingStore = useArticleSetting()
 // 單元設定 method
 const { getArticleSetting } = articleSettingStore
-const { data: setting } = await getArticleSetting()
 
 // 文章分類 store
 const articleCatalogStore = useArticleCatalog()
 // 文章分類 method
 const { getArticleCatalog } = articleCatalogStore
-// 文章分類
-const { data: catalog } = await getArticleCatalog()
-const articleCatalog = computed(() => catalog.value.data)
 
 // 文章 outline store
 const articleOutlineStore = useArticleOutline()
@@ -30,8 +26,19 @@ const articleOutlineStore = useArticleOutline()
 const { getArticleOutline } = articleOutlineStore
 // 文章 active catalog
 const { articleActiveCatalog } = storeToRefs(articleOutlineStore)
-// 文章 outline
-const { data: outline } = await getArticleOutline()
+
+// get data
+const [{ data: setting }, { data: catalog }, { data: outline }] =
+  await Promise.all([
+    getArticleSetting(),
+    getArticleCatalog(),
+    getArticleOutline()
+  ])
+
+// 文章分類 data
+const articleCatalog = computed(() => catalog.value.data)
+
+// 文章 outline data
 const articleOutline = computed(() => outline.value.data)
 
 // 單元名稱

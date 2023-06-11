@@ -9,19 +9,24 @@ const { params } = route
 const newsSettingStore = useNewsSetting()
 // 單元設定 method
 const { getNewsSetting } = newsSettingStore
-const { data: setting } = await getNewsSetting()
 
 // 最新消息 detail store
 const newsDetailStore = useNewsDetail()
 // 最新消息 detail method
 const { getNewsDetail } = newsDetailStore
-// 最新消息 detail
-const { data: detail } = await getNewsDetail(params.catalog, params.title)
-const contents = computed(() => detail.value.data.contents)
-// 相同分類所有最新消息 detail
-const { data: allDetail } = await getNewsDetail(params.catalog)
 
-// 取得其他 detail
+// get data
+const [{ data: setting }, { data: detail }, { data: allDetail }] =
+  await Promise.all([
+    getNewsSetting(),
+    getNewsDetail(params.catalog, params.title),
+    getNewsDetail(params.catalog)
+  ])
+
+// 最新消息 detail data
+const contents = computed(() => detail.value.data.contents)
+
+// 取得其他 detail data
 const otherDetail = computed(() => {
   // 抓取除了自己以外的最新消息
   const target = allDetail.value.data.filter(

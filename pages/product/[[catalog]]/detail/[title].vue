@@ -16,12 +16,6 @@ const modules = [Navigation, Pagination, Autoplay, EffectFade]
 const route = useRoute()
 const { params } = route
 
-// 單元設定 store
-const productSettingStore = useProductSetting()
-// 單元設定 method
-const { getProductSetting } = productSettingStore
-const { data: setting } = await getProductSetting()
-
 // 購物車 store
 const cartStore = useCart()
 // 購物車 method
@@ -32,12 +26,23 @@ const toastStore = useToast()
 // 通知 method
 const { addToast } = toastStore
 
+// 單元設定 store
+const productSettingStore = useProductSetting()
+// 單元設定 method
+const { getProductSetting } = productSettingStore
+
 // 產品 detail store
 const productDetailStore = useProductDetail()
 // 產品 detail method
 const { getProductDetail } = productDetailStore
-// 產品 detail
-const { data: detail } = await getProductDetail(params.catalog, params.title)
+
+// get data
+const [{ data: setting }, { data: detail }] = await Promise.all([
+  getProductSetting(),
+  getProductDetail(params.catalog, params.title)
+])
+
+// 產品 detail data
 const productDetail = computed(() => detail.value.data)
 // 已存在購物車
 const isExist = cartStore.cartList?.find(

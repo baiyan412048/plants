@@ -28,6 +28,13 @@ const productFilterStore = useProductFilter()
 // 產品篩選 method
 const { getProductSize, getProductDiff, getProductEnv } = productFilterStore
 
+// 產品 outline store
+const productOutlineStore = useProductOutline()
+// 產品 outline method
+const { getProductOutline } = productOutlineStore
+// 產品 active catalog
+const { productActiveCatalog } = storeToRefs(productOutlineStore)
+
 // get data
 const [
   { data: setting },
@@ -84,13 +91,6 @@ const updateFilterEnv = (selected, target) => {
   }
   filterEnv.value.push(target.env)
 }
-
-// 產品 outline store
-const productOutlineStore = useProductOutline()
-// 產品 outline method
-const { getProductOutline } = productOutlineStore
-// 產品 active catalog
-const { productActiveCatalog } = storeToRefs(productOutlineStore)
 
 // 單元名稱
 const title = ref(setting.value.data[0].name)

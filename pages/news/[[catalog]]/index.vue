@@ -10,15 +10,11 @@ const { params } = route
 const newsSettingStore = useNewsSetting()
 // 單元設定 method
 const { getNewsSetting } = newsSettingStore
-const { data: setting } = await getNewsSetting()
 
 // 最新消息分類 store
 const newsCatalogStore = useNewsCatalog()
 // 最新消息分類 method
 const { getNewsCatalog } = newsCatalogStore
-// 最新消息分類
-const { data: catalog } = await getNewsCatalog()
-const newsCatalog = computed(() => catalog.value.data)
 
 // 最新消息 outline store
 const newsOutlineStore = useNewsOutline()
@@ -26,8 +22,15 @@ const newsOutlineStore = useNewsOutline()
 const { getNewsOutline } = newsOutlineStore
 // 最新消息 active catalog
 const { newsActiveCatalog } = storeToRefs(newsOutlineStore)
-// 最新消息 outline
-const { data: outline } = await getNewsOutline()
+
+// get data
+const [{ data: setting }, { data: catalog }, { data: outline }] =
+  await Promise.all([getNewsSetting(), getNewsCatalog(), getNewsOutline()])
+
+// 最新消息分類 data
+const newsCatalog = computed(() => catalog.value.data)
+
+// 最新消息 outline data
 const newsOutline = computed(() => outline.value?.data ?? [])
 
 // 單元名稱
