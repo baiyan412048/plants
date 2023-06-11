@@ -18,6 +18,6 @@ const toastStore = useToast()
       </BaseToastGroup>
       <NuxtPage />
     </main>
-    <!-- <BaseFooter /> -->
+    <BaseFooter />
   </div>
 </template>
