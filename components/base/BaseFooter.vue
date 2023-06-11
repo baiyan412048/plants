@@ -4,15 +4,67 @@ import { useArticleSetting, useArticleCatalog } from '@/stores/article'
 import { useProductSetting, useProductCatalog } from '@/stores/product'
 import { useFAQSetting, useFAQCatalog } from '@/stores/faq'
 
-// 最新消息單元設定
+// 最新消息單元設定 store
 const newsSettingStore = useNewsSetting()
+// 最新消息單元設定 method
 const { getNewsSetting } = newsSettingStore
-const { data: newsSetting } = await getNewsSetting()
 
-// 最新消息分類
+// 最新消息分類 store
 const newsCatalogStore = useNewsCatalog()
+// 最新消息分類 method
 const { getNewsCatalog } = newsCatalogStore
-const { data: newsCatalog } = await getNewsCatalog()
+
+// 文章單元設定 store
+const articleSettingStore = useArticleSetting()
+// 文章單元設定 method
+const { getArticleSetting } = articleSettingStore
+
+// 文章分類 store
+const articleCatalogStore = useArticleCatalog()
+// 文章分類 method
+const { getArticleCatalog } = articleCatalogStore
+
+// 產品單元設定 store
+const productSettingStore = useProductSetting()
+// 產品單元設定 method
+const { getProductSetting } = productSettingStore
+
+// 產品分類 store
+const productCatalogStore = useProductCatalog()
+// 產品分類 method
+const { getProductCatalog } = productCatalogStore
+
+// 常見問題單元設定 store
+const faqSettingStore = useFAQSetting()
+// 常見問題單元設定 method
+const { getFAQSetting } = faqSettingStore
+
+// 常見問題分類 store
+const faqCatalogStore = useFAQCatalog()
+// 常見問題分類 method
+const { getFAQCatalog } = faqCatalogStore
+
+const [
+  { data: newsSetting },
+  { data: newsCatalog },
+  { data: articleSetting },
+  { data: articleCatalog },
+  { data: productSetting },
+  { data: productCatalog },
+  { data: faqSetting },
+  { data: faqCatalog }
+] = await Promise.all([
+  getNewsSetting(),
+  getNewsCatalog(),
+  getArticleSetting(),
+  getArticleCatalog(),
+  getProductSetting(),
+  getProductCatalog(),
+  getFAQSetting(),
+  getFAQCatalog()
+])
+
+// 最新消息 data
 const newsData = computed(() => {
   return {
     setting: newsSetting.value.data[0].name,
@@ -20,15 +72,7 @@ const newsData = computed(() => {
   }
 })
 
-// 文章單元設定
-const articleSettingStore = useArticleSetting()
-const { getArticleSetting } = articleSettingStore
-const { data: articleSetting } = await getArticleSetting()
-
-// 文章分類
-const articleCatalogStore = useArticleCatalog()
-const { getArticleCatalog } = articleCatalogStore
-const { data: articleCatalog } = await getArticleCatalog()
+// 文章專欄 data
 const articleData = computed(() => {
   return {
     setting: articleSetting.value.data[0].name,
@@ -36,15 +80,7 @@ const articleData = computed(() => {
   }
 })
 
-// 產品單元設定
-const productSettingStore = useProductSetting()
-const { getProductSetting } = productSettingStore
-const { data: productSetting } = await getProductSetting()
-
-// 產品分類
-const productCatalogStore = useProductCatalog()
-const { getProductCatalog } = productCatalogStore
-const { data: productCatalog } = await getProductCatalog()
+// 產品 data
 const productData = computed(() => {
   return {
     setting: productSetting.value.data[0].name,
@@ -52,15 +88,7 @@ const productData = computed(() => {
   }
 })
 
-// 常見問題單元設定
-const faqSettingStore = useFAQSetting()
-const { getFAQSetting } = faqSettingStore
-const { data: faqSetting } = await getFAQSetting()
-
-// 常見問題分類
-const faqCatalogStore = useFAQCatalog()
-const { getFAQCatalog } = faqCatalogStore
-const { data: faqCatalog } = await getFAQCatalog()
+// 常見問題 data
 const faqData = computed(() => {
   return {
     setting: faqSetting.value.data[0].name,
