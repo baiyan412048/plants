@@ -12,6 +12,8 @@ const toastStore = useToast()
 // 通知 method
 const { addToast } = toastStore
 
+const menuControl = ref(false)
+
 const logout = () => {
   toLogout()
   // 訊息通知
@@ -48,6 +50,22 @@ const logout = () => {
         </template>
         <NuxtLink v-else to="/member/login">登入會員</NuxtLink>
         <NuxtLink to="/cart">購物車</NuxtLink>
+      </div>
+      <div class="control">
+        <div @click="menuControl = !menuControl">
+          <Icon name="ri:menu-2-fill" size="22" />
+        </div>
+        <ul :class="menuControl ? 'active' : ''">
+          <li>
+            <NuxtLink to="/news">最新消息</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/article">文章專欄</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/product">植物觀園</NuxtLink>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
@@ -99,6 +117,8 @@ nav.navbar
     width: 150px
     div
       cursor: pointer
+  .control
+    display: none
   +rwdmax(767)
     padding: 20px
     .container
@@ -109,4 +129,26 @@ nav.navbar
         width: 50px
     .list
       display: none
+    .control
+      position: relative
+      margin-left: 20px
+      display: block
+      ul
+        padding: 20px
+        position: absolute
+        right: -20px
+        border-radius: 10px
+        background-color: #fff
+        pointer-events: none
+        opacity: 0
+        &.active
+          opacity: 1
+          pointer-events: auto
+          transition: opacity .6s
+      li
+        white-space: nowrap
+        font-size: px(16)
+        text-align: center
+        &:not(:last-child)
+          margin-bottom: 20px
 </style>
