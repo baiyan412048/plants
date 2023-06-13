@@ -98,4 +98,10 @@ const shipping = (value) => {
     .product
       flex: 1
       width: 100%
+  +rwdmax(767)
+    .subtitle
+      margin-bottom: 20px
+    .item
+      a
+        flex-wrap: wrap
 </style>

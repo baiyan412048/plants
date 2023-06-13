@@ -194,4 +194,10 @@ const submitForm = async () => {
       align-items: center
       justify-content: center
       gap: 20px
+  +rwdmax(767)
+    .subtitle
+      margin-bottom: 20px
+    .form
+      .half
+        width: 100%
 </style>

@@ -85,6 +85,7 @@ const shipping = (value) => {
     position: relative
     display: flex
     justify-content: center
+    flex-wrap: wrap
     gap: 20px
     border-radius: 8px
     background-color: $green

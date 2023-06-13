@@ -108,13 +108,15 @@ useHead({
   </div>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
 
 .faq-wrapper
   padding: 120px 0 100px
+  +rwdmax(767)
+    padding: 80px 0 60px
 
 .faq-container
   padding: 0 60px
@@ -125,7 +127,13 @@ useHead({
     margin: 0 auto
     max-width: 850px
     width: 100%
+  .tag
+    line-height: 1.6
   .content
     padding: 0 20px
     line-height: 1.6
+  +rwdmax(767)
+    padding: 0 40px
+    .content
+      padding: 0 10px
 </style>

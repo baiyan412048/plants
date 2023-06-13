@@ -134,6 +134,8 @@ useHead({
 
 .article-wrapper
   padding: 120px 0 100px
+  +rwdmax(767)
+    padding: 80px 0 60px
 
 .article-list
   padding: 0 60px
@@ -142,9 +144,18 @@ useHead({
     display: flex
     justify-content: center
     flex-wrap: wrap
-    gap: 100px
+    // gap: 100px
+    gap: clamp(40px, 5.2083vw, 100px)
     max-width: 1550px
     width: 100%
   li
-    width: calc((100% - 100px * 2) / 3)
+    width: calc((100% - clamp(40px, 5.2083vw, 100px) * 2) / 3)
+  +rwdmax(1024)
+    padding: 0 40px
+  +rwdmax(992)
+    li
+      width: calc((100% - clamp(40px, 5.2083vw, 100px)) / 2)
+  +rwdmax(767)
+    li
+      width: 100%
 </style>

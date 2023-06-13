@@ -27,7 +27,7 @@ const props = defineProps({
   </NuxtLink>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -90,4 +90,17 @@ const props = defineProps({
     line-height: 1.5
     letter-spacing: 1px
     text-align: center
+  +rwdmax(1024)
+    padding: 60px
+  +rwdmax(992)
+    width: 100%
+    &:nth-child(2)
+      &::before
+        top: 0
+        left: 50%
+        transform: translate3d(-50%, -50%, 0)
+        width: 115px
+        height: 2px
+  +rwdmax(767)
+    padding: 40px
 </style>

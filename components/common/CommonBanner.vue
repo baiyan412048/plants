@@ -37,7 +37,7 @@ const fontColor = ref(props.color)
   </section>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -76,4 +76,15 @@ const fontColor = ref(props.color)
       font-size: px(60)
       font-family: $serif
       font-weight: 700
+  +rwdmax(1024)
+    .container
+      padding: 160px 40px 60px
+  +rwdmax(768)
+    height: 400px
+    .container
+      .title
+        font-size: px(40)
+  +rwdmax(767)
+    .container
+      padding: 120px 40px 40px
 </style>

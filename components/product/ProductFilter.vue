@@ -34,7 +34,7 @@ const emit = defineEmits(['updateFilter'])
   </ul>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -46,7 +46,6 @@ const emit = defineEmits(['updateFilter'])
     display: flex
     align-items: center
     justify-content: space-between
-    gap: 20px
     cursor: pointer
   input
     position: absolute
@@ -55,7 +54,7 @@ const emit = defineEmits(['updateFilter'])
     &:checked + .checkbox
       border: 2px solid $green
       svg
-        display: block
+        display: block !important
 
 .checkbox
   display: flex
@@ -67,5 +66,5 @@ const emit = defineEmits(['updateFilter'])
   height: 20px
   transition: border .2s
   svg
-    display: none
+    display: none !important
 </style>

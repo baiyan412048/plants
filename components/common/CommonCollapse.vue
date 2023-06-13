@@ -14,7 +14,11 @@ const props = defineProps({
   }
 })
 
-const collapseState = ref(props.open ? true : false)
+const collapseState = ref(false)
+
+onMounted(() => {
+  collapseState.value = props.open && !useDeviceDetector() ? true : false
+})
 </script>
 
 <template>
@@ -32,7 +36,7 @@ const collapseState = ref(props.open ? true : false)
   </div>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'

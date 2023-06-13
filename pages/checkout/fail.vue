@@ -32,6 +32,12 @@ definePageMeta({
     padding-top: 130px
     margin: 0 auto
     display: flex
+    justify-content: center
     gap: 30px
     max-width: 1280px
+    text-align: left
+  +rwdmax(767)
+    padding: 80px 40px 60px
+    .container
+      padding-top: 80px
 </style>

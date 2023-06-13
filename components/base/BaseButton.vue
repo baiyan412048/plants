@@ -52,7 +52,7 @@ const emit = defineEmits(['toClick'])
   </button>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'

@@ -1,4 +1,11 @@
 <script setup>
+import { useToast } from '@/stores/toast'
+
+// 通知 store
+const toastStore = useToast()
+// 通知 method
+const { removeToast } = toastStore
+
 const props = defineProps({
   item: {
     type: Object,
@@ -28,30 +35,41 @@ const props = defineProps({
           }}</NuxtLink>
         </template>
       </template>
-      <div v-else class="close">
+      <div v-else class="close" @click="removeToast(props.item.id)">
         <Icon name="ri:close-fill" size="24" />
       </div>
     </div>
   </div>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
 
 .toast-item
+  position: relative
+  z-index: 1
   padding: 10px 15px
   display: flex
   align-items: center
   gap: 10px
-  border-radius: 10px
-  background-color: rgba(#fff, .8)
-  box-shadow: 0px 0 20px -5px rgb($black, .5)
-  backdrop-filter: blur(5px)
   width: 300px
   height: 80px
-  overflow: hidden
+  pointer-events: auto
+  &::before
+    position: absolute
+    top: 0
+    left: 0
+    z-index: -1
+    display: block
+    border-radius: 10px
+    background-color: rgba(#fff, .8)
+    backdrop-filter: blur(5px)
+    box-shadow: 0px 0 20px -5px rgb($black, .5)
+    width: 100%
+    height: 100%
+    content: ''
   .mark
     position: relative
     z-index: 1

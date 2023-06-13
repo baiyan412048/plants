@@ -246,4 +246,13 @@ useHead({
       align-items: center
       justify-content: center
       gap: 20px
+  +rwdmax(1024)
+    adding: 120px 40px 200px
+  +rwdmax(767)
+    adding: 80px 40px 100px
+    .outline
+      padding-top: 80px
+    .form
+      .half
+        width: 100%
 </style>

@@ -63,6 +63,8 @@ useHead({
 
 .privacy-wrapper
   padding: 120px 0 100px
+  +rwdmax(767)
+    padding: 80px 0 60px
 
 .privacy-container
   padding: 0 60px

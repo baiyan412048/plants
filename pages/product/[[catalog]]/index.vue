@@ -305,28 +305,40 @@ useHead({
 
 <style src="@vueform/slider/themes/default.css"></style>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
 
 .product-wrapper
   padding: 120px 0 100px
+  +rwdmax(767)
+    padding: 40px 0 60px
 
 .product-container
   padding: 0 60px
   margin: 0 auto
   display: flex
   align-items: flex-start
-  gap: 100px
+  gap: clamp(80px, 5.2083vw, 100px)
   max-width: calc(1400px + 60px * 2)
   width: 100%
+  +rwdmax(1024)
+    padding: 0 40px
+  +rwdmax(768)
+    gap: 60px
+  +rwdmax(767)
+    flex-direction: column
 
 .product-aside
   position: sticky
   top: 160px
   max-width: 400px
   width: 28.5714%
+  +rwdmax(767)
+    position: static
+    max-width: 100%
+    width: 100%
 
 .price-block
   .placeholder
@@ -361,6 +373,9 @@ useHead({
 .filter-block
   &:not(:first-child)
     margin-top: 50px
+  +rwdmax(767)
+    &:not(:first-child)
+      margin-top: 20px
 
 .product-list
   max-width: 900px
@@ -368,7 +383,15 @@ useHead({
   ul
     display: flex
     flex-wrap: wrap
-    gap: 60px
+    gap: clamp(40px, 3.125vw, 60px)
   li
-    width: calc((100% - 60px * 2) / 3)
+    width: calc((100% - clamp(40px, 3.125vw, 60px) * 2) / 3)
+  +rwdmax(1024)
+    li
+      width: calc((100% - clamp(40px, 3.125vw, 60px)) / 2)
+  +rwdmax(767)
+    max-width: 100%
+    width: 100%
+    li
+      width: 100%
 </style>

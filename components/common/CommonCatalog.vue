@@ -28,7 +28,7 @@ const props = defineProps({
   </ul>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -37,7 +37,9 @@ const props = defineProps({
   margin-top: 60px
   display: flex
   align-items: center
-  gap: 30px
+  justify-content: center
+  flex-wrap: wrap
+  gap: 10px
   li
     position: relative
     z-index: 0
@@ -63,4 +65,6 @@ const props = defineProps({
         width: 100%
   a
     padding: 0 10px
+  +rwdmax(767)
+    gap: 20px
 </style>

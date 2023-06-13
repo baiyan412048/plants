@@ -22,9 +22,9 @@ const { getMemberOrder } = orderStore
 const { data } = await getMemberOrder(query.orderId)
 const order = computed(() => data.value.data)
 
-if (!profile.value.data.order.includes(query.orderId)) {
-  navigateTo('/product')
-}
+// if (!profile.value.data.order.includes(query.orderId)) {
+//   navigateTo('/product')
+// }
 
 const payment = (value) => {
   if (value == 'linepay') return 'Line pay'
@@ -135,4 +135,12 @@ definePageMeta({
       span
         display: block
         font-size: px(12)
+  +rwdmax(767)
+    padding: 80px 40px 60px
+    .container
+      padding-top: 60px
+      .group
+        flex-direction: column
+      .block
+        width: 100%
 </style>

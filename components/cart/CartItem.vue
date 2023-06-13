@@ -81,7 +81,7 @@ const onMinus = () => {
   </div>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -171,4 +171,25 @@ const onMinus = () => {
     .price
       line-height: 1.2
       flex-shrink: 0
+  +rwdmax(767)
+    .product
+      padding: 10px
+      flex-wrap: wrap
+      align-items: flex-start
+      gap: 20px
+      .photo
+        margin-right: 100px
+        width: 80px
+        height: 80px
+    .purchase
+      padding: 10px
+      .item
+        position: relative
+        gap: 20px
+      .delete
+        position: absolute
+        top: 10px
+        left: -10px
+        z-index: 1
+        background-color: #fff
 </style>

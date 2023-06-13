@@ -2,18 +2,6 @@ import { defineStore } from 'pinia'
 
 export const useToast = defineStore('toast', () => {
   const toastBag = reactive([])
-  // {
-  //   title: '已成功註冊',
-  //   text: '登入會員',
-  //   state: 'success',
-  //   button: [
-  //     {
-  //       type: 'a',
-  //       to: '/member/login',
-  //       text: '會員登入'
-  //     }
-  //   ]
-  // },
 
   const addToast = (item) => {
     item.id = Math.random().toString(36).substring(2, 9)

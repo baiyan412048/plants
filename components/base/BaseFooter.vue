@@ -186,7 +186,7 @@ const faqData = computed(() => {
   </footer>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -250,4 +250,34 @@ footer.footer
       width: 40px
       height: 40px
       font-size: px(26)
+  +rwdmax(1024)
+    padding: 100px 40px 80px
+  +rwdmax(768)
+    padding: 80px 40px 60px
+    .wrapper
+      flex-direction: column-reverse
+      align-items: center
+      justify-content: center
+      text-align: center
+      &.bottom
+        flex-direction: column-reverse
+        align-items: center
+        justify-content: center
+        text-align: center
+    .info
+      align-items: center
+    .info-content
+      margin-bottom: 20px
+      text-align: center
+    .statement
+      flex-direction: column
+      align-items: center
+    .social-media
+      display: none
+  +rwdmax(767)
+    padding: 60px 20px 40px
+    .links
+      gap: 30px
+    .info-logo
+      width: 80px
 </style>

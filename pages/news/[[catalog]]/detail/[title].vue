@@ -138,6 +138,8 @@ useHead({
     height: 600px
     pointer-events: none
     content: ''
+  +rwdmax(767)
+    padding: 80px 0 60px
 
 .news-detail
   padding: 0 120px
@@ -203,4 +205,30 @@ useHead({
     justify-content: center
     max-width: 1280px
     width: 100%
+  +rwdmax(1024)
+    padding: 0 80px
+    .outline
+      padding-top: 100px
+  +rwdmax(767)
+    padding: 0 40px
+    .outline
+      padding-top: 60px
+    .title
+      font-size: px(24)
+    .share-group
+      margin-top: 40px
+
+    .hr
+      margin: 60px auto
+    .paragraph
+      &:not(:last-child)
+        margin-bottom: 30px
+    .images
+      gap: 10px
+    .text
+      padding: 0 10px
+      &:not(:first-child)
+        margin-top: 10px
+    .other-group
+      margin-top: 40px
 </style>

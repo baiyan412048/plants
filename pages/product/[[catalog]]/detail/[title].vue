@@ -391,6 +391,8 @@ onMounted(() => {
     height: 600px
     pointer-events: none
     content: ''
+  +rwdmax(767)
+    padding: 80px 0 60px
 
 .product-detail
   padding: 0 120px
@@ -404,14 +406,26 @@ onMounted(() => {
     max-width: 1400px
     width: 100%
     text-align: center
+  +rwdmax(1024)
+    padding: 0 80px
+  +rwdmax(767)
+    padding: 0 40px
+    .outline
+      padding-top: 0px
 
 .outline-detail
   padding-top: 130px
   display: flex
   align-items: flex-start
   justify-content: space-between
-  gap: 100px
+  gap: clamp(80px, 5.2083vw, 100px)
   width: 100%
+  +rwdmax(1024)
+    gap: 60px
+  +rwdmax(992)
+    flex-direction: column-reverse
+  +rwdmax(767)
+    padding-top: 80px
 
 .outline-aside
   max-width: 500px
@@ -467,6 +481,14 @@ onMounted(() => {
     display: flex
     align-items: center
     gap: 30px
+  +rwdmax(992)
+    max-width: 100%
+    width: 100%
+  +rwdmax(767)
+    .title
+      font-size: px(38)
+
+
 .swiper-group
   position: sticky
   top: 160px
@@ -495,6 +517,9 @@ onMounted(() => {
   .pagination
     .swiper-pagination-total
       color: $gray
+  +rwdmax(992)
+    position: static
+    width: 100%
 
 .info
   margin: 0 auto
@@ -525,9 +550,6 @@ onMounted(() => {
     white-space: break-spaces
     &:not(:first-child)
       margin-top: 30px
-// .info-content
-// .info-package
-// .info-care
 
 .share-group
   margin: 100px auto 0
@@ -537,6 +559,7 @@ onMounted(() => {
   display: flex
   align-items: center
   justify-content: center
+  flex-wrap: wrap
   max-width: 1280px
   width: 100%
 </style>

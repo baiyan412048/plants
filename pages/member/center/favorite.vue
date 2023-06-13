@@ -43,4 +43,14 @@ const profile = computed(() => data.value.data)
     gap: 60px
   li
     width: calc((100% - 60px * 2) / 3)
+  +rwdmax(768)
+    ul
+      gap: 40px
+    li
+      width: calc((100% - 40px * 2) / 3)
+  +rwdmax(767)
+    .subtitle
+      margin-bottom: 20px
+    li
+      width: 100%
 </style>

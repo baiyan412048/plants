@@ -85,7 +85,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -128,4 +128,11 @@ onMounted(() => {
       svg
         path
           fill: $green_dark
+  +rwdmax(767)
+    gap: 20px
+    ul
+      gap: 20px
+    a
+      width: 30px
+      height: 30px
 </style>

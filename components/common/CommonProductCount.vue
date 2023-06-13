@@ -56,7 +56,7 @@ const input = (event) => {
   </div>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -82,6 +82,7 @@ const input = (event) => {
       cursor: not-allowed
   .number
     border-radius: 5px
+    background: none
     border: 1px solid $gray
     width: 60px
     height: 30px

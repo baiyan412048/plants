@@ -130,6 +130,8 @@ useHead({
 
 .news-wrapper
   padding: 120px 0 100px
+  +rwdmax(767)
+    padding: 80px 0 60px
 
 .news-list
   padding: 0 60px
@@ -143,4 +145,12 @@ useHead({
     width: 100%
   li
     width: calc((100% - 100px * 2) / 3)
+  +rwdmax(1024)
+    padding: 0 40px
+  +rwdmax(992)
+    li
+      width: calc((100% - clamp(40px, 5.2083vw, 100px)) / 2)
+  +rwdmax(767)
+    li
+      width: 100%
 </style>

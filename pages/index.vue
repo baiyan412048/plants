@@ -48,8 +48,16 @@ useHead({
     <div class="product">
       <p class="title">熱門商品</p>
       <Swiper
-        :slides-per-view="4"
+        :slides-per-view="1"
         :space-between="50"
+        :breakpoints="{
+          768: {
+            slidesPerView: 3
+          },
+          1024: {
+            slidesPerView: 4
+          }
+        }"
         :modules="modules"
         :autoplay="{
           delay: 2500,
@@ -72,6 +80,8 @@ useHead({
 
 .main-wrapper
   padding-bottom: 100px
+  +rwdmax(1024)
+    padding-bottom: 80px
 
 .outline
   padding: 80px 60px
@@ -83,6 +93,8 @@ useHead({
     bottom: 0
     left: 50%
     transform: translate3d(-50%, 0, 0)
+    max-width: 1024px
+    width: 90%
   .title
     position: relative
     color: $black
@@ -107,6 +119,15 @@ useHead({
       content: ''
   .text
     line-height: 1.6
+  +rwdmax(1024)
+    padding: 80px 40px
+  +rwdmax(768)
+    img
+      display: none
+  +rwdmax(767)
+    padding: 40px
+    .title
+      font-size: px(28)
 
 .product
   padding: 50px 60px
@@ -119,6 +140,12 @@ useHead({
     font-family: $serif
     font-weight: 700
     text-align: center
+  +rwdmax(1024)
+    padding: 50px 40px
+  +rwdmax(767)
+    padding: 40px
+    .title
+      font-size: px(24)
 
 @keyframes arrow
   0%

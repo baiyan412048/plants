@@ -477,7 +477,7 @@ definePageMeta({
   </div>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -619,17 +619,37 @@ definePageMeta({
     .block
       padding: 20px 10px
       border-top: 1px solid $green_fluorescent
-    p
-      display: flex
-      align-items: center
-      justify-content: space-between
-      font-size: px(18)
-      line-height: 1.2
-      letter-spacing: .8px
-      &:not(:last-child)
-        margin-bottom: 20px
+      p
+        display: flex
+        align-items: center
+        justify-content: space-between
+        font-size: px(18)
+        line-height: 1.2
+        letter-spacing: .8px
+        &:not(:last-child)
+          margin-bottom: 20px
   .button-group
     display: flex
     align-items: center
     gap: 20px
+  +rwdmax(1024)
+    padding: 120px 40px 100px
+  +rwdmax(992)
+    .container
+      flex-direction: column-reverse
+      gap: 80px
+    .form
+      width: 100%
+    .aside
+      position: static
+      width: 100%
+  +rwdmax(767)
+    padding: 80px 20px 60px
+    .container
+      padding-top: 60px
+    .cart-item
+      .photo
+        margin-right: 0 !important
+    .aside
+      padding: 10px
 </style>

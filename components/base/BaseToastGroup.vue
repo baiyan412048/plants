@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .toast-group
   padding: 40px 20px
   position: fixed
@@ -16,4 +16,5 @@
   display: flex
   flex-direction: column
   gap: 20px
+  pointer-events: none
 </style>

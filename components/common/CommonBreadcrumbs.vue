@@ -18,7 +18,7 @@ const props = defineProps({
   </ul>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -27,6 +27,8 @@ const props = defineProps({
   padding: 8px 20px
   display: flex
   align-items: center
+  justify-content: center
+  gap: 10px 0
   border-radius: 500px
   background-color: #fff
   font-size: px(14)
@@ -51,4 +53,13 @@ const props = defineProps({
   p
     color: $black
     cursor: default
+  +rwdmax(767)
+    li
+      &:last-child
+        display: none
+      &:nth-last-child(2)
+        &::after
+          content: none
+    a
+      color: $black
 </style>

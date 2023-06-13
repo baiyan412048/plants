@@ -53,7 +53,7 @@ const logout = () => {
   </nav>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '@/assets/base/_variable.sass'
 @import '@/assets/base/_mixin.sass'
 @import '@/assets/base/_function.sass'
@@ -99,4 +99,14 @@ nav.navbar
     width: 150px
     div
       cursor: pointer
+  +rwdmax(767)
+    padding: 20px
+    .container
+      padding: 0 20px
+      height: 60px
+    .logo
+      img
+        width: 50px
+    .list
+      display: none
 </style>

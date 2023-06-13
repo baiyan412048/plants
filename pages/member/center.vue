@@ -113,4 +113,29 @@ definePageMeta({
   .content
     flex: 1
     width: 100%
+  +rwdmax(1024)
+    padding: 120px 40px 100px
+  +rwdmax(992)
+    .container
+      flex-direction: column
+    .aside
+      width: 100%
+      text-align: center
+      .link
+        display: flex
+        align-items: center
+        justify-content: center
+        gap: 20px
+        li
+          padding: 20px 0
+          &:not(:last-child)
+            border: none
+      .base-button
+        margin: 0 auto
+  +rwdmax(767)
+    padding: 80px 40px 60px
+    .outline
+      padding-top: 60px
+    .container
+      margin: 80px auto 0
 </style>

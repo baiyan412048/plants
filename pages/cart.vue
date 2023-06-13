@@ -74,18 +74,18 @@ useHead({
 // 其他產品
 const otherDetail = reactive([])
 
-onMounted(async () => {
-  // 產品 detail store
-  const productOutlineStore = useProductOutline()
-  // 產品 detail method
-  const { getProductOutline } = productOutlineStore
+// 產品 detail store
+const productOutlineStore = useProductOutline()
+// 產品 detail method
+const { getProductOutline } = productOutlineStore
 
+// 產品 detail
+const { data: product } = await getProductOutline()
+
+onMounted(() => {
   // 購物車內所有分類
   const allCatalog = [...cartStore.cartList.map((obj) => obj.catalog)]
-
-  // 產品 detail
-  const { data } = await getProductOutline()
-  const allDetail = computed(() => data.value.data)
+  const allDetail = computed(() => product.value.data)
 
   // 抓取除了自己以外的產品
   const target = allDetail.value.filter((obj) =>
@@ -156,8 +156,16 @@ onMounted(async () => {
           <div class="may-like">
             <p class="tip">也許你會喜歡</p>
             <Swiper
-              :slides-per-view="4"
+              :slides-per-view="1"
               :space-between="50"
+              :breakpoints="{
+                768: {
+                  slidesPerView: 3
+                },
+                1024: {
+                  slidesPerView: 4
+                }
+              }"
               :modules="modules"
               :autoplay="{
                 delay: 2500,
@@ -182,9 +190,9 @@ onMounted(async () => {
 @import '@/assets/base/_function.sass'
 
 .cart-wrapper
-  padding: 120px 0 100px
+  padding: 120px 60px 100px
   margin: 0 auto
-  max-width: 1280px
+  max-width: calc(1280px + 60px * 2)
   &::before
     position: absolute
     top: 0
@@ -198,7 +206,7 @@ onMounted(async () => {
     content: ''
   .outline
     padding-top: 130px
-    margin-bottom: 60px
+    margin-bottom: 100px
     display: flex
     flex-direction: column
     align-items: center
@@ -245,7 +253,7 @@ onMounted(async () => {
         height: 100%
         object-fit: cover
   .info
-    margin: 100px auto 0
+    margin: 0 auto
     display: flex
     gap: 30px
     max-width: 1280px
@@ -292,4 +300,22 @@ onMounted(async () => {
       font-size: px(24)
       line-height: 1.2
       letter-spacing: .8px
+  +rwdmax(1024)
+    padding: 120px 40px 100px
+  +rwdmax(992)
+    .info
+      flex-direction: column
+    .info-aside
+      position: static
+      max-width: 100%
+  +rwdmax(767)
+    padding: 80px 20px 60px
+    .outline
+      padding-top: 60px
+      margin-bottom: 20px
+    .may-like
+      margin: 60px auto 0
+      max-width: 300px
+      .tip
+        text-align: center
 </style>
