@@ -4,7 +4,8 @@ export const useMember = defineStore('user', () => {
   const runtimeConfig = useRuntimeConfig()
   const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
-  const loginState = ref(false)
+  const loginState = useCookie('loginState')
+  loginState.value = loginState.value || false
 
   const profile = useCookie('profile')
   profile.value = profile.value || {
