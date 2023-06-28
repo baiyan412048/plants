@@ -5,9 +5,10 @@ export const usePayment = defineStore('payment', () => {
   const { apiBaseUrl: API_BASE_URL, apiKey: API_KEY } = runtimeConfig.public
 
   // 購物車列表
-  const orderCookie = useCookie('order')
-  orderCookie.value = orderCookie.value || {}
-  const order = reactive(orderCookie.value)
+  // const orderCookie = useCookie('order')
+  // orderCookie.value = orderCookie.value || {}
+  // const order = reactive(orderCookie.value)
+  const order = reactive({})
 
   const amount = useCookie('amount')
   amount.value = amount.value || 0
@@ -39,7 +40,7 @@ export const usePayment = defineStore('payment', () => {
     order.purchase = purchase
 
     // 更新 cookie
-    orderCookie.value = toRaw(order)
+    // orderCookie.value = toRaw(order)
   }
 
   const postPaymentRequest = async (postData) => {

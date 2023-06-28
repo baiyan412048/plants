@@ -2,9 +2,10 @@ import { defineStore } from 'pinia'
 
 export const useCart = defineStore('cart', () => {
   // 購物車列表
-  const cartListCookie = useCookie('cartList')
-  cartListCookie.value = cartListCookie.value || []
-  const cartList = reactive(cartListCookie.value)
+  // const cartListCookie = useCookie('cartList')
+  // cartListCookie.value = cartListCookie.value || []
+  // const cartList = reactive(cartListCookie.value)
+  const cartList = reactive([])
   // 小計
   const subtotalPrice = computed(() => {
     const cartPriceGroup = cartList.map((obj) => parseInt(obj.total))
@@ -33,14 +34,14 @@ export const useCart = defineStore('cart', () => {
         item
       )
       // 更新 cookie
-      cartListCookie.value = toRaw(cartList)
+      // cartListCookie.value = toRaw(cartList)
       return
     }
     cartList.push({
       ...item
     })
     // 更新 cookie
-    cartListCookie.value = toRaw(cartList)
+    // cartListCookie.value = toRaw(cartList)
   }
 
   // 移除購物車
@@ -50,7 +51,7 @@ export const useCart = defineStore('cart', () => {
       1
     )
     // 更新 cookie
-    cartListCookie.value = toRaw(cartList)
+    // cartListCookie.value = toRaw(cartList)
   }
 
   // 移除購物車加購品
@@ -69,14 +70,14 @@ export const useCart = defineStore('cart', () => {
       }
     })
     // 更新 cookie
-    cartListCookie.value = toRaw(cartList)
+    // cartListCookie.value = toRaw(cartList)
   }
 
   // 清空購物車
   const resetCartList = () => {
     cartList.splice(0, cartList.length)
     // 更新 cookie
-    cartListCookie.value = toRaw(cartList)
+    // cartListCookie.value = toRaw(cartList)
   }
 
   return {
