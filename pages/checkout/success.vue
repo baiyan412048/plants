@@ -54,6 +54,65 @@ definePageMeta({
       <div class="container">
         <p class="title">已成功送出訂單</p>
         <div class="group">
+          <div class="block order">
+            <p class="tip">訂單資訊</p>
+            <ul>
+              <li>
+                <span>購買商品 :</span>
+                <div
+                  v-for="(item, key) in order.products"
+                  :key="key"
+                  class="item"
+                >
+                  <div class="photo">
+                    <nuxt-img :src="item.imageUrl" loading="lazy" />
+                  </div>
+                  <div class="content">
+                    <p>品名 : {{ item.name }}</p>
+                    <p>單價 : NT ${{ item.price.toLocaleString() }}</p>
+                    <p>數量 : {{ item.quantity }}</p>
+                  </div>
+                </div>
+              </li>
+              <li v-if="order.purchase.length">
+                <span>加購商品 :</span>
+                <div
+                  v-for="(item, key) in order.purchase"
+                  :key="key"
+                  class="item"
+                >
+                  <div class="photo">
+                    <nuxt-img :src="item.imageUrl" loading="lazy" />
+                  </div>
+                  <div class="content">
+                    <p>品名 : {{ item.name }}</p>
+                    <p>單價 : NT ${{ item.price.toLocaleString() }}</p>
+                    <p>數量 : {{ item.quantity }}</p>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span>訂單總金額 :</span> NT ${{
+                  order.price.total.toLocaleString()
+                }}
+              </li>
+              <li>
+                <span>訂單運費 :</span> NT ${{
+                  order.price.fee.toLocaleString()
+                }}
+              </li>
+            </ul>
+            <!-- <ul>
+              <li><span>姓名 :</span> {{ order.bill.name }}</li>
+              <li><span>手機 :</span> {{ `0${order.bill.phone}` }}</li>
+              <li><span>電子郵件 :</span> {{ order.bill.email }}</li>
+              <li><span>付款方式 :</span> {{ payment(order.bill.payment) }}</li>
+              <li>
+                <span>付款狀態 :</span
+                >{{ order.bill.state ? '付款成功' : '尚未付款' }}
+              </li>
+            </ul> -->
+          </div>
           <div class="block bill">
             <p class="tip">帳單資訊</p>
             <ul>
@@ -110,7 +169,7 @@ definePageMeta({
   .container
     padding-top: 130px
     margin: 0 auto
-    max-width: 900px
+    max-width: 800px
     .title
       margin-bottom: 60px
       font-size: px(32)
@@ -119,13 +178,14 @@ definePageMeta({
       text-align: center
     .group
       display: flex
+      flex-direction: column
       gap: 30px
     .block
       padding: 20px
       border-radius: 8px
       border: 1px solid $green
       line-height: 1.6
-      width: 50%
+      width: 100%
       .tip
         margin-bottom: 10px
         font-size: px(18)
@@ -135,6 +195,20 @@ definePageMeta({
       span
         display: block
         font-size: px(12)
+    .item
+      display: flex
+      align-items: flex-start
+      gap: 20px
+      margin-top: 10px
+    .photo
+      width: 100px
+      height: 100%
+      img
+        border-radius: 10px
+        width: 100%
+        height: 100%
+        object-fit: cover
+    .content
   +rwdmax(767)
     padding: 80px 40px 60px
     .container
